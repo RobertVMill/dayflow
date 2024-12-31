@@ -313,6 +313,17 @@ export default function BaseMetrics() {
           />
         </div>
       </div>
+
+      <div className="space-y-4 sm:space-y-6">
+        <h4 className="text-lg font-medium text-[#8B1E1E]/80 px-2 sm:px-0">Financial Health</h4>
+        <div className="space-y-4 sm:space-y-6">
+          <BaseChart
+            title="Cash Savings"
+            metricType="savings"
+            yAxisLabel="$"
+          />
+        </div>
+      </div>
     </div>
   );
 } 

@@ -12,7 +12,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
-export type MetricType = 'sleep_score' | 'sunlight' | 'water' | 'plant_based' | 'reliability';
+export type MetricType = 'sleep_score' | 'sunlight' | 'water' | 'plant_based' | 'reliability' | 'savings';
 
 export interface BaseMetric {
   id: string;
@@ -54,6 +54,11 @@ export async function addBaseMetric(
       }
       if (!habits || habits.length === 0) {
         throw new Error('Reliability metrics require habits to be specified');
+      }
+      break;
+    case 'savings':
+      if (value < 0) {
+        throw new Error('Savings amount cannot be negative');
       }
       break;
     default:
