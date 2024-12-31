@@ -348,6 +348,11 @@ export default function BaseMetrics() {
             metricType="meditation"
             yAxisLabel="min"
           />
+          <BaseChart
+            title="Walking Minutes"
+            metricType="walking"
+            yAxisLabel="min"
+          />
         </div>
       </div>
 

@@ -154,10 +154,7 @@ export default function Home() {
               </div>
 
               <ul className="space-y-3 text-lg text-gray-300">
-                <li className="flex items-center space-x-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                  <span>Long Walks</span>
-                </li>
+                {/* All bullet points have been removed */}
               </ul>
             </div>
           </section>
