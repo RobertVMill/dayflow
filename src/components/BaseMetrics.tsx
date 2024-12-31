@@ -49,7 +49,7 @@ const RELIABILITY_HABITS = [
   'Over-deliver on your promises'
 ];
 
-function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBased = false, isReliability = false, options }: BaseChartProps) {
+function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBased = false, isReliability = false, options: chartOptions }: BaseChartProps) {
   const [metrics, setMetrics] = useState<BaseMetric[]>([]);
   const [newValue, setNewValue] = useState('');
   const [selectedHabits, setSelectedHabits] = useState<string[]>([]);
@@ -127,7 +127,7 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
     ]
   };
 
-  const options = {
+  const defaultOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -200,8 +200,16 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
           }
         },
         min: 0,
-        max: isBinary ? 1 : (metricType === 'savings' || metricType === 'meditation' ? undefined : 100),
-        stepSize: isBinary ? 1 : undefined
+        max: isBinary ? 1 : (
+          metricType === 'savings' || 
+          metricType === 'meditation' || 
+          metricType === 'walking' || 
+          metricType === 'github_commits' 
+            ? undefined 
+            : 100
+        ),
+        stepSize: isBinary ? 1 : undefined,
+        ...(chartOptions?.scales?.y || {})
       } as any,
       x: {
         grid: {
@@ -227,7 +235,7 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
   return (
     <div className="w-full p-2 sm:p-4 bg-black/30 rounded-lg">
       <div className="h-[250px] sm:h-[300px] mb-4">
-        <Line data={chartData} options={options} />
+        <Line data={chartData} options={defaultOptions} />
       </div>
       <form onSubmit={handleAddMetric} className="flex flex-col gap-2">
         {isPlantBased || isReliability ? (
@@ -274,6 +282,16 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
               ✕
             </button>
           </div>
+        ) : metricType === 'github_commits' ? (
+          <input
+            type="number"
+            step="1"
+            min="0"
+            value={newValue}
+            onChange={(e) => setNewValue(e.target.value)}
+            placeholder="Enter github commits"
+            className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#8B1E1E]/20 placeholder-gray-500"
+          />
         ) : metricType === 'savings' ? (
           <input
             type="number"
