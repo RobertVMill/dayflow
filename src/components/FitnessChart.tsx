@@ -138,22 +138,49 @@ export default function FitnessChart({ title, metricType, yAxisLabel }: FitnessC
   if (error) return <div className="text-red-500 bg-red-500/10 p-4 rounded-lg">{error}</div>;
 
   return (
-    <div className="w-full p-4 bg-black/30 rounded-lg">
-      <div className="h-[300px] mb-4">
-        <Line data={chartData} options={options} />
+    <div className="w-full p-2 sm:p-4 bg-black/30 rounded-lg">
+      <div className="h-[250px] sm:h-[300px] mb-4">
+        <Line data={chartData} options={{
+          ...options,
+          scales: {
+            ...options.scales,
+            x: {
+              ...options.scales.x,
+              ticks: {
+                ...options.scales.x.ticks,
+                autoSkip: true,
+                maxTicksLimit: 6,
+                maxRotation: 45,
+                minRotation: 45,
+                font: {
+                  size: 10
+                }
+              }
+            },
+            y: {
+              ...options.scales.y,
+              ticks: {
+                ...options.scales.y.ticks,
+                font: {
+                  size: 10
+                }
+              }
+            }
+          }
+        }} />
       </div>
-      <form onSubmit={handleAddMetric} className="flex gap-2">
+      <form onSubmit={handleAddMetric} className="flex gap-1 sm:gap-2">
         <input
           type="number"
           step="0.01"
           value={newValue}
           onChange={(e) => setNewValue(e.target.value)}
           placeholder={`Enter ${title.toLowerCase()}`}
-          className="flex-1 p-2 rounded bg-black/30 text-white border border-[#8B1E1E]/20 placeholder-gray-500"
+          className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#8B1E1E]/20 placeholder-gray-500"
         />
         <button
           type="submit"
-          className="px-4 py-2 bg-[#8B1E1E] text-white rounded hover:bg-[#661616] transition-colors"
+          className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#8B1E1E] text-white rounded hover:bg-[#661616] transition-colors"
         >
           Add
         </button>
