@@ -65,51 +65,94 @@ function LearningChart({ title, metricType, yAxisLabel }: LearningChartProps) {
   }
 
   const chartData = {
-    labels: metrics.map(m => new Date(m.created_at).toLocaleDateString()),
+    labels: metrics.map(m => {
+      const date = new Date(m.created_at);
+      // On mobile, show shorter date format
+      return window.innerWidth < 640 
+        ? `${date.getMonth() + 1}/${date.getDate()}`
+        : date.toLocaleDateString();
+    }),
     datasets: [
       {
         label: title,
         data: metrics.map(m => m.value),
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.1
+        borderColor: '#8B1E1E',
+        backgroundColor: 'rgba(139, 30, 30, 0.1)',
+        tension: 0.1,
+        fill: true
       }
     ]
   };
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top' as const,
+        display: false
       },
       title: {
         display: true,
-        text: title
+        text: title,
+        color: '#ffffff',
+        font: {
+          size: 16
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleColor: '#ffffff',
+        bodyColor: '#ffffff',
+        padding: 12,
+        displayColors: false
       }
     },
     scales: {
       y: {
         title: {
           display: true,
-          text: yAxisLabel
+          text: yAxisLabel,
+          color: '#ffffff'
         },
-        beginAtZero: true,
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)'
+        },
         ticks: {
-          stepSize: 1
+          color: '#ffffff',
+          stepSize: 1,
+          font: {
+            size: 10
+          }
+        },
+        beginAtZero: true
+      },
+      x: {
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)'
+        },
+        ticks: {
+          color: '#ffffff',
+          maxRotation: 45,
+          minRotation: 45,
+          autoSkip: true,
+          maxTicksLimit: 6,
+          font: {
+            size: 10
+          }
         }
       }
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div className="text-red-500">{error}</div>;
+  if (isLoading) return <div className="text-center py-4">Loading...</div>;
+  if (error) return <div className="text-red-500 bg-red-500/10 p-4 rounded-lg">{error}</div>;
 
   return (
-    <div className="w-full max-w-2xl p-4 bg-white/5 rounded-lg">
-      <div className="mb-4">
+    <div className="w-full p-2 sm:p-4 bg-black/30 rounded-lg">
+      <div className="h-[250px] sm:h-[300px] mb-4">
         <Line data={chartData} options={options} />
       </div>
-      <form onSubmit={handleAddMetric} className="flex gap-2">
+      <form onSubmit={handleAddMetric} className="flex gap-1 sm:gap-2">
         <input
           type="number"
           step="1"
@@ -117,11 +160,11 @@ function LearningChart({ title, metricType, yAxisLabel }: LearningChartProps) {
           value={newValue}
           onChange={(e) => setNewValue(e.target.value)}
           placeholder={`Enter ${title.toLowerCase()}`}
-          className="flex-1 p-2 rounded bg-white/10 text-foreground"
+          className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#8B1E1E]/20 placeholder-gray-500"
         />
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+          className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#8B1E1E] text-white rounded hover:bg-[#661616] transition-colors"
         >
           Add
         </button>
@@ -132,17 +175,22 @@ function LearningChart({ title, metricType, yAxisLabel }: LearningChartProps) {
 
 export default function LearningMetrics() {
   return (
-    <div className="w-full space-y-8">
-      <LearningChart
-        title="Pages Read"
-        metricType="pages_read"
-        yAxisLabel="Pages"
-      />
-      <LearningChart
-        title="GitHub Commits"
-        metricType="github_commits"
-        yAxisLabel="Commits"
-      />
+    <div className="w-full grid gap-6 sm:gap-8 -mx-2 sm:mx-0">
+      <div className="space-y-4 sm:space-y-6">
+        <h4 className="text-lg font-medium text-[#8B1E1E]/80 px-2 sm:px-0">Reading & Development</h4>
+        <div className="space-y-4 sm:space-y-6">
+          <LearningChart
+            title="Pages Read"
+            metricType="pages_read"
+            yAxisLabel="Pages"
+          />
+          <LearningChart
+            title="GitHub Commits"
+            metricType="github_commits"
+            yAxisLabel="Commits"
+          />
+        </div>
+      </div>
     </div>
   );
 } 
