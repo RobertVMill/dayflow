@@ -199,7 +199,7 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
           }
         },
         min: 0,
-        max: isBinary ? 1 : (metricType === 'savings' ? undefined : 100),
+        max: isBinary ? 1 : (metricType === 'savings' || metricType === 'meditation' ? undefined : 100),
         stepSize: isBinary ? 1 : undefined
       } as any,
       x: {
@@ -267,6 +267,16 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
             value={newValue}
             onChange={(e) => setNewValue(e.target.value)}
             placeholder="Enter cash savings amount ($)"
+            className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#8B1E1E]/20 placeholder-gray-500"
+          />
+        ) : metricType === 'meditation' ? (
+          <input
+            type="number"
+            step="1"
+            min="0"
+            value={newValue}
+            onChange={(e) => setNewValue(e.target.value)}
+            placeholder="Enter meditation minutes"
             className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#8B1E1E]/20 placeholder-gray-500"
           />
         ) : (
