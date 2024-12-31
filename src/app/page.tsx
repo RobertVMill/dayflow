@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import FitnessMetrics from '../components/FitnessMetrics';
 import LearningMetrics from '../components/LearningMetrics';
 import EmpathyMetrics from '../components/EmpathyMetrics';
+import BaseMetrics from '../components/BaseMetrics';
 import JournalEntries from '../components/JournalEntries';
 
 export default function Home() {
@@ -104,7 +105,7 @@ export default function Home() {
           {/* Base Section */}
           <section className="section-gradient space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
             <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
-              Relentlessly strengthen the base
+              Relentlessly build the base
             </h2>
             
             {/* Foundation SVG */}
@@ -147,44 +148,42 @@ export default function Home() {
               </svg>
             </div>
 
-            <ul className="space-y-3 text-lg text-gray-300">
-              <li className="flex items-center space-x-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                <span>Sleep</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                <span>Workout</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                <span>Sunlight</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                <span>Water</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                <span>Plants</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                <span>Never letting people down</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                <span>Savings</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                <span>Meditation</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                <span>Long Walks</span>
-              </li>
-            </ul>
+            <div className="space-y-8">
+              <div className="mt-6 bg-black/30 p-6 rounded-xl">
+                <BaseMetrics />
+              </div>
+
+              <ul className="space-y-3 text-lg text-gray-300">
+                <li className="flex items-center space-x-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                  <span>Sunlight</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                  <span>Water</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                  <span>Plants</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                  <span>Never letting people down</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                  <span>Savings</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                  <span>Meditation</span>
+                </li>
+                <li className="flex items-center space-x-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                  <span>Long Walks</span>
+                </li>
+              </ul>
+            </div>
           </section>
 
           {/* Differentiation Section */}
