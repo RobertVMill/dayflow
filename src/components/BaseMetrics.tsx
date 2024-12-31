@@ -133,7 +133,7 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false }: BaseChar
           font: {
             size: 10
           },
-          callback: function(value: number) {
+          callback: function(value: any) {
             if (isBinary) {
               return value === 1 ? 'Yes' : 'No';
             }
@@ -143,7 +143,7 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false }: BaseChar
         min: 0,
         max: isBinary ? 1 : 100,
         stepSize: isBinary ? 1 : undefined
-      },
+      } as any,
       x: {
         grid: {
           color: 'rgba(255, 255, 255, 0.1)'
