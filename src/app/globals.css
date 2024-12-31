@@ -7,10 +7,10 @@
   --background: #000000;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  min-height: 100vh;
+@layer base {
+  body {
+    @apply text-foreground bg-background;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
