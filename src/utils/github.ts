@@ -30,10 +30,12 @@ export async function fetchAndStoreGithubCommits() {
     const commitsByDate = events.reduce((acc: {[key: string]: number}, event: any) => {
       if (event.type === 'PushEvent') {
         const date = new Date(event.created_at).toISOString().split('T')[0];
-        acc[date] = (acc[date] || 0) + event.payload.size;
+        acc[date] = (acc[date] || 0) + (event.payload.size || 0);
       }
       return acc;
     }, {});
+
+    console.log('Fetched commits by date:', commitsByDate);
 
     // Get existing metrics to avoid duplicates
     const existingMetrics = await getBaseMetrics('github_commits');
@@ -48,7 +50,11 @@ export async function fetchAndStoreGithubCommits() {
         const commitDate = new Date(date);
         commitDate.setUTCHours(12, 0, 0, 0);
         
-        await addBaseMetric('github_commits', count);
+        // Ensure count is a number and convert to integer
+        const commitCount = Math.floor(Number(count));
+        console.log(`Adding ${commitCount} commits for ${date}`);
+        
+        await addBaseMetric('github_commits', commitCount);
       }
     }
     

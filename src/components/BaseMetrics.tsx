@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { BaseMetric, addBaseMetric, getBaseMetrics } from '../utils/base-supabase';
+import { fetchAndStoreGithubCommits } from '../utils/github';
 
 ChartJS.register(
   CategoryScale,
@@ -229,6 +230,21 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
     }
   };
 
+  async function handleRefreshGithub() {
+    if (metricType === 'github_commits') {
+      try {
+        setIsLoading(true);
+        await fetchAndStoreGithubCommits();
+        await loadMetrics();
+      } catch (err) {
+        setError('Failed to refresh GitHub commits');
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }
+
   if (isLoading) return <div className="text-center py-4">Loading...</div>;
   if (error) return <div className="text-red-500 bg-red-500/10 p-4 rounded-lg">{error}</div>;
 
@@ -238,6 +254,15 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
         <Line data={chartData} options={defaultOptions} />
       </div>
       <form onSubmit={handleAddMetric} className="flex flex-col gap-2">
+        {metricType === 'github_commits' && (
+          <button
+            type="button"
+            onClick={handleRefreshGithub}
+            className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#8B1E1E]/20 text-white rounded hover:bg-[#8B1E1E]/30 transition-colors mb-2"
+          >
+            Refresh GitHub Commits
+          </button>
+        )}
         {isPlantBased || isReliability ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
