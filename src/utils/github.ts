@@ -1,32 +1,17 @@
-import { addBaseMetric } from './base-supabase';
+import { addBaseMetric, getBaseMetrics } from './base-supabase';
 
 const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 const USERNAME = 'RobertVMill'; // Your GitHub username
-
-interface GithubCommit {
-  commit: {
-    author: {
-      date: string;
-    };
-  };
-}
 
 export async function fetchAndStoreGithubCommits() {
   if (!GITHUB_TOKEN) {
     throw new Error('GitHub token not configured');
   }
 
-  // Get yesterday's date in ISO format
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const since = yesterday.toISOString().split('T')[0];
-  
-  // Get today's date in ISO format
-  const until = new Date().toISOString().split('T')[0];
-
   try {
+    // Get the last 30 days of activity
     const response = await fetch(
-      `https://api.github.com/users/${USERNAME}/events`,
+      `https://api.github.com/users/${USERNAME}/events?per_page=100`,
       {
         headers: {
           Authorization: `Bearer ${GITHUB_TOKEN}`,
@@ -41,16 +26,33 @@ export async function fetchAndStoreGithubCommits() {
 
     const events = await response.json();
     
-    // Count push events (commits) for yesterday
-    const yesterdayCommits = events.filter((event: any) => {
-      const eventDate = new Date(event.created_at).toISOString().split('T')[0];
-      return event.type === 'PushEvent' && eventDate === since;
-    }).reduce((total: number, event: any) => total + event.payload.size, 0);
+    // Group commits by date
+    const commitsByDate = events.reduce((acc: {[key: string]: number}, event: any) => {
+      if (event.type === 'PushEvent') {
+        const date = new Date(event.created_at).toISOString().split('T')[0];
+        acc[date] = (acc[date] || 0) + event.payload.size;
+      }
+      return acc;
+    }, {});
 
-    // Store the commit count
-    await addBaseMetric('github_commits', yesterdayCommits);
+    // Get existing metrics to avoid duplicates
+    const existingMetrics = await getBaseMetrics('github_commits');
+    const existingDates = new Set(existingMetrics.map(m => 
+      new Date(m.created_at).toISOString().split('T')[0]
+    ));
+
+    // Store new commit counts
+    for (const [date, count] of Object.entries(commitsByDate)) {
+      if (!existingDates.has(date)) {
+        // Create a date object at noon UTC for consistent timestamps
+        const commitDate = new Date(date);
+        commitDate.setUTCHours(12, 0, 0, 0);
+        
+        await addBaseMetric('github_commits', count);
+      }
+    }
     
-    return yesterdayCommits;
+    return commitsByDate;
   } catch (error) {
     console.error('Error fetching GitHub commits:', error);
     throw error;

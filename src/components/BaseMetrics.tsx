@@ -31,6 +31,7 @@ interface BaseChartProps {
   isBinary?: boolean;
   isPlantBased?: boolean;
   isReliability?: boolean;
+  options?: any;
 }
 
 const PLANT_BASED_HABITS = [
@@ -48,7 +49,7 @@ const RELIABILITY_HABITS = [
   'Over-deliver on your promises'
 ];
 
-function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBased = false, isReliability = false }: BaseChartProps) {
+function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBased = false, isReliability = false, options }: BaseChartProps) {
   const [metrics, setMetrics] = useState<BaseMetric[]>([]);
   const [newValue, setNewValue] = useState('');
   const [selectedHabits, setSelectedHabits] = useState<string[]>([]);
@@ -337,6 +338,16 @@ export default function BaseMetrics() {
             title="GitHub Commits"
             metricType="github_commits"
             yAxisLabel="commits"
+            options={{
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1
+                  }
+                }
+              }
+            }}
           />
           <BaseChart
             title="30 Minutes of Sunlight"
