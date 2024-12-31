@@ -40,10 +40,64 @@ export default function Home() {
         <main className="space-y-16">
           {/* Vision Section */}
           <section className="section-gradient space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
-            <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Vision</h1>
-            <p className="text-xl text-gray-300 leading-relaxed max-w-3xl">
-              Go placidly amongst the noise and the haste. Never let people down, most importantly yourself. 
-              Relentlessly strengthen your base. Relentlessly extend your differentiation.
+            <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent animate-vision">Vision</h1>
+            
+            {/* Vision SVG */}
+            <div className="w-full max-w-2xl mx-auto py-8 animate-vision" style={{ animationDelay: '0.2s' }}>
+              <svg
+                viewBox="0 0 400 200"
+                className="w-full h-auto stroke-[#8B1E1E] fill-none stroke-2"
+                style={{ strokeLinecap: 'round', strokeLinejoin: 'round' }}
+              >
+                {/* Divine Light Rays */}
+                <g className="stroke-[#8B1E1E]/30">
+                  <path d="M 200 40 L 200 10" />
+                  <path d="M 180 45 L 170 15" />
+                  <path d="M 220 45 L 230 15" />
+                  <path d="M 160 55 L 140 30" />
+                  <path d="M 240 55 L 260 30" />
+                </g>
+
+                {/* Central Circle (Divine Guidance) */}
+                <circle 
+                  cx="200" 
+                  cy="80" 
+                  r="30" 
+                  className="fill-[#8B1E1E]/10 stroke-[#8B1E1E]" 
+                />
+
+                {/* Person Silhouette */}
+                <path 
+                  d="M 185 140 C 185 120, 215 120, 215 140" 
+                  className="stroke-[#8B1E1E]" 
+                />
+                <circle 
+                  cx="200" 
+                  cy="110" 
+                  r="10" 
+                  className="fill-[#8B1E1E]/10 stroke-[#8B1E1E]" 
+                />
+
+                {/* Growth Path */}
+                <path 
+                  d="M 200 150 C 200 180, 140 170, 120 150" 
+                  className="stroke-[#8B1E1E]" 
+                />
+                <path 
+                  d="M 200 150 C 200 180, 260 170, 280 150" 
+                  className="stroke-[#8B1E1E]" 
+                />
+
+                {/* Decorative Elements */}
+                <path 
+                  d="M 100 180 C 100 100, 300 100, 300 180" 
+                  className="stroke-[#8B1E1E]/20" 
+                />
+              </svg>
+            </div>
+
+            <p className="text-xl text-gray-300 leading-relaxed max-w-3xl animate-vision" style={{ animationDelay: '0.4s' }}>
+              You&apos;ve got something special, Bert. Listen to god&apos;s plan for you. Relentlessly build your base, and relentlessly express your gifts.
             </p>
           </section>
 
