@@ -1,9 +1,9 @@
 import { addBaseMetric, getBaseMetrics } from './base-supabase';
 
 const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
-const USERNAME = 'RobertVMill'; // Your GitHub username
+const USERNAME = 'RobertVMill';
 
-export async function fetchAndStoreGithubCommits() {
+export async function fetchGithubCommits(): Promise<{[key: string]: number}> {
   if (!GITHUB_TOKEN) {
     throw new Error('GitHub token not configured');
   }
@@ -36,28 +36,6 @@ export async function fetchAndStoreGithubCommits() {
     }, {});
 
     console.log('Fetched commits by date:', commitsByDate);
-
-    // Get existing metrics to avoid duplicates
-    const existingMetrics = await getBaseMetrics('github_commits');
-    const existingDates = new Set(existingMetrics.map(m => 
-      new Date(m.created_at).toISOString().split('T')[0]
-    ));
-
-    // Store new commit counts
-    for (const [date, count] of Object.entries(commitsByDate)) {
-      if (!existingDates.has(date)) {
-        // Create a date object at noon UTC for consistent timestamps
-        const commitDate = new Date(date);
-        commitDate.setUTCHours(12, 0, 0, 0);
-        
-        // Ensure count is a number and convert to integer
-        const commitCount = Math.floor(Number(count));
-        console.log(`Adding ${commitCount} commits for ${date}`);
-        
-        await addBaseMetric('github_commits', commitCount);
-      }
-    }
-    
     return commitsByDate;
   } catch (error) {
     console.error('Error fetching GitHub commits:', error);

@@ -25,7 +25,8 @@ export interface BaseMetric {
 export async function addBaseMetric(
   metric_type: MetricType,
   value: number,
-  habits?: string[]
+  habits?: string[],
+  timestamp?: Date
 ): Promise<void> {
   // Validate value based on metric type
   switch (metric_type) {
@@ -78,7 +79,12 @@ export async function addBaseMetric(
 
   const { error } = await supabase
     .from('base_metrics')
-    .insert([{ metric_type, value, habits }]);
+    .insert([{ 
+      metric_type, 
+      value, 
+      habits,
+      created_at: timestamp ? timestamp.toISOString() : undefined 
+    }]);
 
   if (error) throw error;
 }

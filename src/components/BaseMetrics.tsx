@@ -12,6 +12,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { BaseMetric, addBaseMetric, getBaseMetrics } from '../utils/base-supabase';
+import { fetchGithubCommits } from '../utils/github';
 
 ChartJS.register(
   CategoryScale,
@@ -51,14 +52,34 @@ const RELIABILITY_HABITS = [
 
 function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBased = false, isReliability = false, options: chartOptions }: BaseChartProps) {
   const [metrics, setMetrics] = useState<BaseMetric[]>([]);
+  const [githubMetrics, setGithubMetrics] = useState<{date: string, value: number}[]>([]);
   const [newValue, setNewValue] = useState('');
   const [selectedHabits, setSelectedHabits] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadMetrics();
+    if (metricType === 'github_commits') {
+      loadGithubMetrics();
+    } else {
+      loadMetrics();
+    }
   }, [metricType]);
+
+  async function loadGithubMetrics() {
+    try {
+      const commits = await fetchGithubCommits();
+      const sortedCommits = Object.entries(commits)
+        .map(([date, value]) => ({ date, value }))
+        .sort((a, b) => a.date.localeCompare(b.date));
+      setGithubMetrics(sortedCommits);
+    } catch (err) {
+      setError('Failed to load GitHub commits');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   async function loadMetrics() {
     try {
@@ -108,16 +129,25 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
   }
 
   const chartData = {
-    labels: metrics.map(m => {
-      const date = new Date(m.created_at);
-      return window.innerWidth < 640 
-        ? `${date.getMonth() + 1}/${date.getDate()}`
-        : date.toLocaleDateString();
-    }),
+    labels: metricType === 'github_commits' 
+      ? githubMetrics.map(m => {
+          const date = new Date(m.date);
+          return window.innerWidth < 640 
+            ? `${date.getMonth() + 1}/${date.getDate()}`
+            : date.toLocaleDateString();
+        })
+      : metrics.map(m => {
+          const date = new Date(m.created_at);
+          return window.innerWidth < 640 
+            ? `${date.getMonth() + 1}/${date.getDate()}`
+            : date.toLocaleDateString();
+        }),
     datasets: [
       {
         label: title,
-        data: metrics.map(m => m.value),
+        data: metricType === 'github_commits' 
+          ? githubMetrics.map(m => m.value)
+          : metrics.map(m => m.value),
         borderColor: '#8B1E1E',
         backgroundColor: 'rgba(139, 30, 30, 0.1)',
         tension: 0.1,
