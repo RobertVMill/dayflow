@@ -2,23 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --foreground: #ffffff;
-    --background: #000000;
-  }
-
-  html {
-    @apply antialiased;
-  }
-
-  body {
-    @apply bg-black text-white min-h-screen;
-  }
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+  --accent: #8B1E1E;
+  --accent-dark: #661616;
+  --secondary: #1c1c1e;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+body {
+  @apply bg-gradient-to-br from-black via-[#1c1c1e] to-black text-white min-h-screen;
+}
+
+.section-gradient {
+  @apply relative;
+}
+
+.section-gradient::before {
+  content: '';
+  @apply absolute top-0 right-0 w-full h-full bg-gradient-to-br from-[#8B1E1E]/20 via-transparent to-transparent opacity-50 pointer-events-none -z-10;
 }

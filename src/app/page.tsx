@@ -34,12 +34,12 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <main className="space-y-12">
+        <main className="space-y-16">
           {/* Vision Section */}
-          <section className="space-y-6">
-            <h1 className="text-4xl font-bold tracking-tight">Vision</h1>
+          <section className="section-gradient space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
+            <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">Vision</h1>
             <p className="text-xl text-gray-300 leading-relaxed max-w-3xl">
               Go placidly amongst the noise and the haste. Never let people down, most importantly yourself. 
               Relentlessly strengthen your base. Relentlessly extend your differentiation.
@@ -47,55 +47,86 @@ export default function Home() {
           </section>
 
           {/* Base Section */}
-          <section className="space-y-6">
-            <h2 className="text-3xl font-semibold tracking-tight">Relentlessly strengthen the base</h2>
-            <ul className="space-y-2 text-lg text-gray-300">
-              <li>Sleep</li>
-              <li>Workout</li>
-              <li>Sunlight</li>
-              <li>Water</li>
-              <li>Plants</li>
-              <li>Never letting people down</li>
-              <li>Savings</li>
-              <li>Meditation</li>
-              <li>Long Walks</li>
+          <section className="section-gradient space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
+            <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+              Relentlessly strengthen the base
+            </h2>
+            <ul className="space-y-3 text-lg text-gray-300">
+              <li className="flex items-center space-x-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                <span>Sleep</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                <span>Workout</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                <span>Sunlight</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                <span>Water</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                <span>Plants</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                <span>Never letting people down</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                <span>Savings</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                <span>Meditation</span>
+              </li>
+              <li className="flex items-center space-x-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
+                <span>Long Walks</span>
+              </li>
             </ul>
           </section>
 
           {/* Differentiation Section */}
-          <section className="space-y-8">
-            <h2 className="text-3xl font-semibold tracking-tight">Relentlessly extend your differentiation</h2>
+          <section className="section-gradient space-y-8 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
+            <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+              Relentlessly extend your differentiation
+            </h2>
             <div className="space-y-12">
               {/* Fitness Section */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-medium">Fitness</h3>
+                <h3 className="text-2xl font-medium text-[#8B1E1E]">Fitness</h3>
                 <p className="text-lg text-gray-300">
                   Constantly pushing boundaries, setting new personal records, and maintaining peak physical condition.
                 </p>
-                <div className="mt-6">
+                <div className="mt-6 bg-black/30 p-6 rounded-xl">
                   <FitnessMetrics />
                 </div>
               </div>
 
               {/* Learning Section */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-medium">Learning</h3>
+                <h3 className="text-2xl font-medium text-[#8B1E1E]">Learning</h3>
                 <p className="text-lg text-gray-300">
                   Deep work, continuous study, and relentless curiosity across diverse domains. 
                   Building knowledge that compounds over time.
                 </p>
-                <div className="mt-6">
+                <div className="mt-6 bg-black/30 p-6 rounded-xl">
                   <LearningMetrics />
                 </div>
               </div>
 
               {/* Empathy Section */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-medium">Empathy</h3>
+                <h3 className="text-2xl font-medium text-[#8B1E1E]">Empathy</h3>
                 <p className="text-lg text-gray-300">
                   Developing deeper connections, understanding perspectives, and fostering meaningful relationships.
                 </p>
-                <div className="mt-6">
+                <div className="mt-6 bg-black/30 p-6 rounded-xl">
                   <EmpathyMetrics />
                 </div>
               </div>
