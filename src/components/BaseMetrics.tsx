@@ -233,14 +233,14 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {(isPlantBased ? PLANT_BASED_HABITS : RELIABILITY_HABITS).map(habit => (
-                <label key={habit} className="flex items-center gap-2 text-white">
+                <label key={habit} className="flex items-center gap-3 text-white p-2 hover:bg-white/5 rounded cursor-pointer">
                   <input
                     type="checkbox"
                     checked={selectedHabits.includes(habit)}
                     onChange={() => handleHabitToggle(habit)}
-                    className="rounded border-[#8B1E1E]/20 bg-black/30 text-[#8B1E1E] focus:ring-[#8B1E1E]"
+                    className="w-5 h-5 rounded border-[#8B1E1E]/20 bg-black/30 text-[#8B1E1E] focus:ring-[#8B1E1E]"
                   />
-                  <span className="text-sm">{habit}</span>
+                  <span className="text-base">{habit}</span>
                 </label>
               ))}
             </div>
@@ -249,16 +249,30 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
             </div>
           </>
         ) : isBinary ? (
-          <select
-            value={newValue}
-            onChange={(e) => setNewValue(e.target.value)}
-            className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#8B1E1E]/20"
-            required
-          >
-            <option value="">Select...</option>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-          </select>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setNewValue('yes')}
+              className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
+                newValue === 'yes' 
+                  ? 'bg-green-600/20 text-green-400 border-green-600/40' 
+                  : 'bg-black/30 text-gray-400 hover:text-green-400'
+              } border`}
+            >
+              ✓
+            </button>
+            <button
+              type="button"
+              onClick={() => setNewValue('no')}
+              className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
+                newValue === 'no'
+                  ? 'bg-red-600/20 text-red-400 border-red-600/40'
+                  : 'bg-black/30 text-gray-400 hover:text-red-400'
+              } border`}
+            >
+              ✕
+            </button>
+          </div>
         ) : metricType === 'savings' ? (
           <input
             type="number"

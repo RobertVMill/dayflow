@@ -212,7 +212,7 @@ export default function Home() {
               <div className="space-y-4">
                 <h3 className="text-2xl font-medium text-[#8B1E1E]">Fitness</h3>
                 <p className="text-lg text-gray-300">
-                  Constantly pushing boundaries, setting new personal records, and maintaining peak physical condition.
+                  Fitness is the hidden superpower because it lets you do 10x more for 10x longer.
                 </p>
                 <div className="mt-6 bg-black/30 p-6 rounded-xl">
                   <FitnessMetrics />
@@ -223,8 +223,7 @@ export default function Home() {
               <div className="space-y-4">
                 <h3 className="text-2xl font-medium text-[#8B1E1E]">Learning</h3>
                 <p className="text-lg text-gray-300">
-                  Deep work, continuous study, and relentless curiosity across diverse domains. 
-                  Building knowledge that compounds over time.
+                  The best learner is the best earner.
                 </p>
                 <div className="mt-6 bg-black/30 p-6 rounded-xl">
                   <LearningMetrics />
@@ -235,7 +234,7 @@ export default function Home() {
               <div className="space-y-4">
                 <h3 className="text-2xl font-medium text-[#8B1E1E]">Empathy</h3>
                 <p className="text-lg text-gray-300">
-                  Developing deeper connections, understanding perspectives, and fostering meaningful relationships.
+                  Building an empathy is an absolute super power for making friends, money, and fullfillment.
                 </p>
                 <div className="mt-6 bg-black/30 p-6 rounded-xl">
                   <EmpathyMetrics />
