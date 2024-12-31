@@ -156,8 +156,17 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
                 ...metric.habits.map(h => `✓ ${h}`)
               ];
             }
+            if (isReliability && metric.habits) {
+              return [
+                `Score: ${context.raw}%`,
+                ...metric.habits.map(h => `✓ ${h}`)
+              ];
+            }
             if (isBinary) {
               return `${context.raw === 1 ? 'Yes' : 'No'}`;
+            }
+            if (metricType === 'savings') {
+              return `$${context.raw.toLocaleString()}`;
             }
             return `${context.raw}${yAxisLabel}`;
           }
@@ -183,11 +192,14 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
             if (isBinary) {
               return value === 1 ? 'Yes' : 'No';
             }
+            if (metricType === 'savings') {
+              return `$${value.toLocaleString()}`;
+            }
             return value;
           }
         },
         min: 0,
-        max: isBinary ? 1 : 100,
+        max: isBinary ? 1 : (metricType === 'savings' ? undefined : 100),
         stepSize: isBinary ? 1 : undefined
       } as any,
       x: {
@@ -247,6 +259,16 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
             <option value="yes">Yes</option>
             <option value="no">No</option>
           </select>
+        ) : metricType === 'savings' ? (
+          <input
+            type="number"
+            step="1"
+            min="0"
+            value={newValue}
+            onChange={(e) => setNewValue(e.target.value)}
+            placeholder="Enter cash savings amount ($)"
+            className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#8B1E1E]/20 placeholder-gray-500"
+          />
         ) : (
           <input
             type="number"
@@ -310,6 +332,11 @@ export default function BaseMetrics() {
             metricType="reliability"
             yAxisLabel="%"
             isReliability={true}
+          />
+          <BaseChart
+            title="Meditation Minutes"
+            metricType="meditation"
+            yAxisLabel="min"
           />
         </div>
       </div>

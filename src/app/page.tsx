@@ -156,14 +156,6 @@ export default function Home() {
               <ul className="space-y-3 text-lg text-gray-300">
                 <li className="flex items-center space-x-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                  <span>Savings</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
-                  <span>Meditation</span>
-                </li>
-                <li className="flex items-center space-x-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
                   <span>Long Walks</span>
                 </li>
               </ul>
