@@ -1,40 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { JournalEntry, addJournalEntry, getLatestJournalEntry, updateJournalEntry } from '../utils/supabase';
+import { JournalEntry, addJournalEntry } from '../utils/supabase';
 
 export default function JournalEntries() {
-  const [entry, setEntry] = useState<JournalEntry>({
+  const emptyEntry: JournalEntry = {
     blessings: '',
     contributions: '',
     fitness_improvements: '',
     microbiome_improvements: '',
     craft_improvements: '',
     best_day_plan: ''
-  });
-  const [isLoading, setIsLoading] = useState(true);
+  };
+
+  const [entry, setEntry] = useState<JournalEntry>(emptyEntry);
+  const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
-  useEffect(() => {
-    loadLatestEntry();
-  }, []);
-
-  async function loadLatestEntry() {
-    try {
-      const data = await getLatestJournalEntry();
-      if (data) {
-        setEntry(data);
-        setSuccessMessage('Latest entry loaded successfully');
-      }
-      setIsLoading(false);
-    } catch (err) {
-      console.error('Error loading journal entry:', err);
-      setError('Failed to load journal entry');
-      setIsLoading(false);
-    }
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,14 +26,10 @@ export default function JournalEntries() {
     setSuccessMessage(null);
 
     try {
-      if (entry.id) {
-        await updateJournalEntry(entry.id, entry);
-        setSuccessMessage('Journal entry updated successfully!');
-      } else {
-        await addJournalEntry(entry);
-        setSuccessMessage('New journal entry saved successfully!');
-      }
-      await loadLatestEntry();
+      await addJournalEntry(entry);
+      setSuccessMessage('New journal entry saved successfully!');
+      // Reset form after successful save
+      setEntry(emptyEntry);
     } catch (err) {
       console.error('Error saving journal entry:', err);
       setError('Failed to save journal entry');
