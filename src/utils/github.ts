@@ -50,7 +50,7 @@ export async function fetchGithubCommits(): Promise<{[key: string]: number}> {
       return acc;
     }, {});
 
-    // Add today's commits
+    // Add today's commits (always include today's entry)
     const today = new Date().toISOString().split('T')[0];
     const todayCommits = todayEvents.reduce((count: number, event: any) => {
       if (event.type === 'PushEvent' && 
@@ -60,11 +60,12 @@ export async function fetchGithubCommits(): Promise<{[key: string]: number}> {
       return count;
     }, 0);
 
-    if (todayCommits > 0) {
-      commitsByDate[today] = todayCommits;
-    }
+    // Always set today's entry, even if it's 0
+    commitsByDate[today] = todayCommits;
 
     console.log('Fetched commits by date:', commitsByDate);
+    console.log(`Today (${today}): ${todayCommits} commits`);
+    
     return commitsByDate;
   } catch (error) {
     console.error('Error fetching GitHub commits:', error);
