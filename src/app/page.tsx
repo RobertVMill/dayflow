@@ -24,12 +24,12 @@ export default function Home() {
   }
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <div className="max-w-2xl text-center sm:text-left mb-8">
           <h1 className="text-4xl font-semibold mb-4">Vision</h1>
           <p className="text-lg text-foreground/80 leading-relaxed">
-            Go placidly amongst the noise and the haste. Never let people down, most importantly yourself. Relentlessly strengthen your base. Relentlessly build upon your unique capabilities.
+            Go placidly amongst the noise and the haste. Never let people down, most importantly yourself. Relentlessly strengthen your base. Relentlessly extend your differentiation.
           </p>
         </div>
 
@@ -101,7 +101,7 @@ export default function Home() {
         </div>
 
         <div className="max-w-2xl text-center sm:text-left">
-          <h2 className="text-2xl font-semibold mb-4">Relentlessly extend my lead in areas of differentiation</h2>
+          <h2 className="text-2xl font-semibold mb-4">Relentlessly extend your differentiation</h2>
           <div className="space-y-6">
             <div>
               <h3 className="text-xl font-medium mb-2">Fitness</h3>
