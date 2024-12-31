@@ -9,18 +9,28 @@ import EmpathyMetrics from '../components/EmpathyMetrics';
 export default function Home() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const password = localStorage.getItem('appPassword');
-    if (password !== process.env.NEXT_PUBLIC_APP_PASSWORD) {
-      router.push('/login');
-    } else {
-      setIsLoading(false);
+    try {
+      const password = localStorage.getItem('appPassword');
+      if (password !== process.env.NEXT_PUBLIC_APP_PASSWORD) {
+        router.push('/login');
+      } else {
+        setIsLoading(false);
+      }
+    } catch (err) {
+      setError('Failed to initialize app');
+      console.error(err);
     }
   }, [router]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="flex items-center justify-center min-h-screen text-red-500">{error}</div>;
   }
 
   return (
