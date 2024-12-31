@@ -137,6 +137,49 @@ export default function Home() {
             <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
               Relentlessly extend your differentiation
             </h2>
+
+            {/* Differentiation SVG */}
+            <div className="w-full max-w-2xl mx-auto py-8">
+              <svg
+                viewBox="0 0 400 200"
+                className="w-full h-auto stroke-[#8B1E1E] fill-none stroke-2"
+                style={{ strokeLinecap: 'round', strokeLinejoin: 'round' }}
+              >
+                {/* Central Growth Line */}
+                <path 
+                  d="M 200 180 L 200 40" 
+                  className="stroke-[#8B1E1E]" 
+                />
+                
+                {/* Diverging Paths */}
+                <g className="stroke-[#8B1E1E]">
+                  <path d="M 200 120 L 140 60" />
+                  <path d="M 200 120 L 260 60" />
+                  <path d="M 200 120 L 200 60" />
+                </g>
+
+                {/* Path Endpoints */}
+                <g className="fill-[#8B1E1E]">
+                  <circle cx="140" cy="60" r="4" />
+                  <circle cx="200" cy="40" r="4" />
+                  <circle cx="260" cy="60" r="4" />
+                </g>
+
+                {/* Decorative Elements */}
+                <g className="stroke-[#8B1E1E]/30">
+                  <path d="M 160 180 C 160 140, 240 140, 240 180" />
+                  <path d="M 120 180 C 120 100, 280 100, 280 180" />
+                </g>
+
+                {/* Labels */}
+                <g className="fill-white text-sm">
+                  <text x="125" y="50" className="text-[10px]">Fitness</text>
+                  <text x="180" y="30" className="text-[10px]">Learning</text>
+                  <text x="245" y="50" className="text-[10px]">Empathy</text>
+                </g>
+              </svg>
+            </div>
+
             <div className="space-y-12">
               {/* Fitness Section */}
               <div className="space-y-4">
