@@ -28,20 +28,24 @@ export default function Login() {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="flex items-center justify-center min-h-screen text-foreground">Loading...</div>;
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <form onSubmit={handleLogin} className="flex flex-col gap-4">
+    <div className="flex items-center justify-center min-h-screen bg-background">
+      <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-md p-8">
+        <h1 className="text-2xl font-semibold text-foreground mb-4 text-center">Welcome to Dayflow</h1>
         <input
           type="password"
           placeholder="Enter password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="p-2 border rounded"
+          className="p-3 border rounded bg-background text-foreground border-foreground/20 focus:border-foreground/40 outline-none"
         />
-        <button type="submit" className="p-2 bg-blue-500 text-white rounded">
+        <button 
+          type="submit" 
+          className="p-3 bg-foreground text-background rounded hover:bg-foreground/90 transition-colors font-medium"
+        >
           Login
         </button>
       </form>
