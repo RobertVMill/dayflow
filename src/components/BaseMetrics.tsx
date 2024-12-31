@@ -30,6 +30,7 @@ interface BaseChartProps {
   yAxisLabel: string;
   isBinary?: boolean;
   isPlantBased?: boolean;
+  isReliability?: boolean;
 }
 
 const PLANT_BASED_HABITS = [
@@ -40,7 +41,14 @@ const PLANT_BASED_HABITS = [
   'Plant-Based'
 ];
 
-function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBased = false }: BaseChartProps) {
+const RELIABILITY_HABITS = [
+  'Always show up',
+  'Be on time',
+  'Respond in a timely manner',
+  'Over-deliver on your promises'
+];
+
+function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBased = false, isReliability = false }: BaseChartProps) {
   const [metrics, setMetrics] = useState<BaseMetric[]>([]);
   const [newValue, setNewValue] = useState('');
   const [selectedHabits, setSelectedHabits] = useState<string[]>([]);
@@ -65,12 +73,16 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
 
   async function handleAddMetric(e: React.FormEvent) {
     e.preventDefault();
-    if (isPlantBased && selectedHabits.length === 0) return;
-    if (!isPlantBased && !newValue) return;
+    if ((isPlantBased || isReliability) && selectedHabits.length === 0) return;
+    if (!isPlantBased && !isReliability && !newValue) return;
 
     try {
       if (isPlantBased) {
         const value = selectedHabits.length * 20; // Each habit is worth 20%
+        await addBaseMetric(metricType, value, selectedHabits);
+        setSelectedHabits([]);
+      } else if (isReliability) {
+        const value = selectedHabits.length * 25; // Each habit is worth 25%
         await addBaseMetric(metricType, value, selectedHabits);
         setSelectedHabits([]);
       } else {
@@ -205,10 +217,10 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
         <Line data={chartData} options={options} />
       </div>
       <form onSubmit={handleAddMetric} className="flex flex-col gap-2">
-        {isPlantBased ? (
+        {isPlantBased || isReliability ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {PLANT_BASED_HABITS.map(habit => (
+              {(isPlantBased ? PLANT_BASED_HABITS : RELIABILITY_HABITS).map(habit => (
                 <label key={habit} className="flex items-center gap-2 text-white">
                   <input
                     type="checkbox"
@@ -221,7 +233,7 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
               ))}
             </div>
             <div className="text-right text-sm text-gray-400">
-              Score: {selectedHabits.length * 20}%
+              Score: {selectedHabits.length * (isPlantBased ? 20 : 25)}%
             </div>
           </>
         ) : isBinary ? (
@@ -292,6 +304,12 @@ export default function BaseMetrics() {
             metricType="plant_based"
             yAxisLabel="%"
             isPlantBased={true}
+          />
+          <BaseChart
+            title="Never Letting People Down"
+            metricType="reliability"
+            yAxisLabel="%"
+            isReliability={true}
           />
         </div>
       </div>
