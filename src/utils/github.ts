@@ -42,13 +42,24 @@ async function fetchAllEvents(): Promise<any[]> {
 }
 
 function processEvents(events: any[]): {[key: string]: number} {
-  return events.reduce((acc: {[key: string]: number}, event: any) => {
+  const commitsByDate: {[key: string]: number} = {};
+  const repoSet = new Set<string>();
+
+  events.forEach(event => {
     if (event.type === 'PushEvent') {
       const date = new Date(event.created_at).toISOString().split('T')[0];
-      acc[date] = (acc[date] || 0) + (event.payload.size || 0);
+      const repoName = event.repo.name;
+      const commitCount = event.payload.size || 0;
+      
+      commitsByDate[date] = (commitsByDate[date] || 0) + commitCount;
+      repoSet.add(repoName);
     }
-    return acc;
-  }, {});
+  });
+
+  // Log unique repositories we're getting commits from
+  console.log('Commits found in these repositories:', Array.from(repoSet));
+  
+  return commitsByDate;
 }
 
 export async function fetchGithubCommits(): Promise<{[key: string]: number}> {
