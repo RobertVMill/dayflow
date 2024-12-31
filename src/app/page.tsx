@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import FitnessMetrics from '../components/FitnessMetrics';
 import LearningMetrics from '../components/LearningMetrics';
 import EmpathyMetrics from '../components/EmpathyMetrics';
+import JournalEntries from '../components/JournalEntries';
 
 export default function Home() {
   const router = useRouter();
@@ -214,6 +215,52 @@ export default function Home() {
                   <EmpathyMetrics />
                 </div>
               </div>
+            </div>
+          </section>
+
+          {/* Execute Today Section */}
+          <section className="section-gradient space-y-8 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
+            <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+              Relentlessly Execute Today
+            </h2>
+            
+            {/* Journal SVG */}
+            <div className="w-full max-w-2xl mx-auto py-8">
+              <svg
+                viewBox="0 0 400 200"
+                className="w-full h-auto stroke-[#8B1E1E] fill-none stroke-2"
+                style={{ strokeLinecap: 'round', strokeLinejoin: 'round' }}
+              >
+                {/* Journal Book Shape */}
+                <path 
+                  d="M 100 50 L 300 50 L 300 150 L 100 150 Z" 
+                  className="fill-[#8B1E1E]/10 stroke-[#8B1E1E]" 
+                />
+                
+                {/* Journal Binding */}
+                <path 
+                  d="M 90 45 L 90 155 C 90 155, 100 150, 100 150 L 100 50 C 100 50, 90 45, 90 45" 
+                  className="fill-[#8B1E1E]/20 stroke-[#8B1E1E]" 
+                />
+                
+                {/* Journal Lines */}
+                <g className="stroke-[#8B1E1E]/30">
+                  <path d="M 120 70 L 280 70" />
+                  <path d="M 120 90 L 280 90" />
+                  <path d="M 120 110 L 280 110" />
+                  <path d="M 120 130 L 280 130" />
+                </g>
+                
+                {/* Decorative Elements */}
+                <path 
+                  d="M 150 40 C 150 30, 250 30, 250 40" 
+                  className="stroke-[#8B1E1E]/20" 
+                />
+              </svg>
+            </div>
+
+            <div className="mt-8">
+              <JournalEntries />
             </div>
           </section>
         </main>
