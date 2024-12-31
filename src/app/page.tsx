@@ -51,6 +51,47 @@ export default function Home() {
             <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
               Relentlessly strengthen the base
             </h2>
+            
+            {/* Foundation SVG */}
+            <div className="w-full max-w-2xl mx-auto py-8">
+              <svg
+                viewBox="0 0 400 200"
+                className="w-full h-auto stroke-[#8B1E1E] fill-none stroke-2"
+                style={{ strokeLinecap: 'round', strokeLinejoin: 'round' }}
+              >
+                {/* Ground Line */}
+                <path d="M 50 150 L 350 150" className="stroke-white/20" />
+                
+                {/* Foundation Base */}
+                <path 
+                  d="M 100 150 L 300 150 L 280 180 L 120 180 Z" 
+                  className="fill-[#8B1E1E]/10 stroke-[#8B1E1E]" 
+                />
+                
+                {/* Support Lines */}
+                <g className="stroke-[#8B1E1E]">
+                  <path d="M 120 150 L 120 130" />
+                  <path d="M 160 150 L 160 130" />
+                  <path d="M 200 150 L 200 130" />
+                  <path d="M 240 150 L 240 130" />
+                  <path d="M 280 150 L 280 130" />
+                </g>
+                
+                {/* Foundation Top */}
+                <path d="M 100 130 L 300 130" className="stroke-[#8B1E1E]" />
+                
+                {/* Decorative Growth Lines */}
+                <path 
+                  d="M 80 150 C 80 100, 320 100, 320 150" 
+                  className="stroke-[#8B1E1E]/30" 
+                />
+                <path 
+                  d="M 90 150 C 90 110, 310 110, 310 150" 
+                  className="stroke-[#8B1E1E]/20" 
+                />
+              </svg>
+            </div>
+
             <ul className="space-y-3 text-lg text-gray-300">
               <li className="flex items-center space-x-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#8B1E1E]"></span>
