@@ -9,22 +9,37 @@ export async function fetchGithubCommits(): Promise<{[key: string]: number}> {
   }
 
   try {
-    // Get the last 30 days of activity
-    const response = await fetch(
-      `https://api.github.com/users/${USERNAME}/events?per_page=100`,
-      {
-        headers: {
-          Authorization: `Bearer ${GITHUB_TOKEN}`,
-          'Accept': 'application/vnd.github.v3+json'
+    // Get both user events and today's commits
+    const [eventsResponse, todayResponse] = await Promise.all([
+      fetch(
+        `https://api.github.com/users/${USERNAME}/events?per_page=100`,
+        {
+          headers: {
+            Authorization: `Bearer ${GITHUB_TOKEN}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
         }
-      }
-    );
+      ),
+      // Get today's commits specifically
+      fetch(
+        `https://api.github.com/users/${USERNAME}/events`,
+        {
+          headers: {
+            Authorization: `Bearer ${GITHUB_TOKEN}`,
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        }
+      )
+    ]);
 
-    if (!response.ok) {
+    if (!eventsResponse.ok || !todayResponse.ok) {
       throw new Error('Failed to fetch GitHub data');
     }
 
-    const events = await response.json();
+    const [events, todayEvents] = await Promise.all([
+      eventsResponse.json(),
+      todayResponse.json()
+    ]);
     
     // Group commits by date
     const commitsByDate = events.reduce((acc: {[key: string]: number}, event: any) => {
@@ -34,6 +49,20 @@ export async function fetchGithubCommits(): Promise<{[key: string]: number}> {
       }
       return acc;
     }, {});
+
+    // Add today's commits
+    const today = new Date().toISOString().split('T')[0];
+    const todayCommits = todayEvents.reduce((count: number, event: any) => {
+      if (event.type === 'PushEvent' && 
+          new Date(event.created_at).toISOString().split('T')[0] === today) {
+        return count + (event.payload.size || 0);
+      }
+      return count;
+    }, 0);
+
+    if (todayCommits > 0) {
+      commitsByDate[today] = todayCommits;
+    }
 
     console.log('Fetched commits by date:', commitsByDate);
     return commitsByDate;
