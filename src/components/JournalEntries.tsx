@@ -15,6 +15,7 @@ export default function JournalEntries() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
     loadLatestEntry();
@@ -25,6 +26,7 @@ export default function JournalEntries() {
       const data = await getLatestJournalEntry();
       if (data) {
         setEntry(data);
+        setSuccessMessage('Latest entry loaded successfully');
       }
       setIsLoading(false);
     } catch (err) {
@@ -38,12 +40,15 @@ export default function JournalEntries() {
     e.preventDefault();
     setIsSaving(true);
     setError(null);
+    setSuccessMessage(null);
 
     try {
       if (entry.id) {
         await updateJournalEntry(entry.id, entry);
+        setSuccessMessage('Journal entry updated successfully!');
       } else {
         await addJournalEntry(entry);
+        setSuccessMessage('New journal entry saved successfully!');
       }
       await loadLatestEntry();
     } catch (err) {
@@ -51,15 +56,20 @@ export default function JournalEntries() {
       setError('Failed to save journal entry');
     } finally {
       setIsSaving(false);
+      // Scroll the success/error message into view
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
   function handleChange(field: keyof JournalEntry, value: string) {
     setEntry(prev => ({ ...prev, [field]: value }));
+    // Clear messages when user starts typing
+    setError(null);
+    setSuccessMessage(null);
   }
 
   if (isLoading) {
-    return <div className="text-center">Loading...</div>;
+    return <div className="text-center py-4 text-white">Loading...</div>;
   }
 
   return (
@@ -67,6 +77,12 @@ export default function JournalEntries() {
       {error && (
         <div className="text-red-500 bg-red-500/10 p-4 rounded-lg">
           {error}
+        </div>
+      )}
+      
+      {successMessage && (
+        <div className="text-green-500 bg-green-500/10 p-4 rounded-lg">
+          {successMessage}
         </div>
       )}
 
@@ -80,6 +96,7 @@ export default function JournalEntries() {
             onChange={(e) => handleChange('blessings', e.target.value)}
             className="w-full h-24 bg-black/30 border border-[#8B1E1E]/20 rounded-lg p-3 text-white"
             placeholder="List your blessings..."
+            required
           />
         </div>
 
@@ -92,6 +109,7 @@ export default function JournalEntries() {
             onChange={(e) => handleChange('contributions', e.target.value)}
             className="w-full h-24 bg-black/30 border border-[#8B1E1E]/20 rounded-lg p-3 text-white"
             placeholder="List what you can contribute..."
+            required
           />
         </div>
 
@@ -104,6 +122,7 @@ export default function JournalEntries() {
             onChange={(e) => handleChange('fitness_improvements', e.target.value)}
             className="w-full h-24 bg-black/30 border border-[#8B1E1E]/20 rounded-lg p-3 text-white"
             placeholder="List your fitness goals for today..."
+            required
           />
         </div>
 
@@ -116,6 +135,7 @@ export default function JournalEntries() {
             onChange={(e) => handleChange('microbiome_improvements', e.target.value)}
             className="w-full h-24 bg-black/30 border border-[#8B1E1E]/20 rounded-lg p-3 text-white"
             placeholder="List your microbiome improvements..."
+            required
           />
         </div>
 
@@ -128,6 +148,7 @@ export default function JournalEntries() {
             onChange={(e) => handleChange('craft_improvements', e.target.value)}
             className="w-full h-24 bg-black/30 border border-[#8B1E1E]/20 rounded-lg p-3 text-white"
             placeholder="List your craft improvements..."
+            required
           />
         </div>
 
@@ -140,6 +161,7 @@ export default function JournalEntries() {
             onChange={(e) => handleChange('best_day_plan', e.target.value)}
             className="w-full h-24 bg-black/30 border border-[#8B1E1E]/20 rounded-lg p-3 text-white"
             placeholder="Describe your plan for the best day..."
+            required
           />
         </div>
       </div>
