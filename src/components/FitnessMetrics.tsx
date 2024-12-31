@@ -2,32 +2,47 @@ import FitnessChart from './FitnessChart';
 
 export default function FitnessMetrics() {
   return (
-    <div className="w-full space-y-8">
-      <FitnessChart
-        title="Resting Heart Rate"
-        metricType="heart_rate"
-        yAxisLabel="BPM"
-      />
-      <FitnessChart
-        title="Heart Rate Variability"
-        metricType="hrv"
-        yAxisLabel="ms"
-      />
-      <FitnessChart
-        title="Running Pace"
-        metricType="running_pace"
-        yAxisLabel="KM/H"
-      />
-      <FitnessChart
-        title="Bench Press (3RM)"
-        metricType="bench_press"
-        yAxisLabel="lbs"
-      />
-      <FitnessChart
-        title="Power Clean (3RM)"
-        metricType="power_clean"
-        yAxisLabel="lbs"
-      />
+    <div className="w-full grid gap-8 sm:gap-6">
+      <div className="space-y-6">
+        <h4 className="text-lg font-medium text-[#8B1E1E]/80">Heart Health</h4>
+        <div className="space-y-6">
+          <FitnessChart
+            title="Resting Heart Rate"
+            metricType="heart_rate"
+            yAxisLabel="BPM"
+          />
+          <FitnessChart
+            title="Heart Rate Variability"
+            metricType="hrv"
+            yAxisLabel="ms"
+          />
+        </div>
+      </div>
+
+      <div className="space-y-6">
+        <h4 className="text-lg font-medium text-[#8B1E1E]/80">Cardio</h4>
+        <FitnessChart
+          title="Running Pace"
+          metricType="running_pace"
+          yAxisLabel="KM/H"
+        />
+      </div>
+
+      <div className="space-y-6">
+        <h4 className="text-lg font-medium text-[#8B1E1E]/80">Strength</h4>
+        <div className="space-y-6">
+          <FitnessChart
+            title="Bench Press (3RM)"
+            metricType="bench_press"
+            yAxisLabel="lbs"
+          />
+          <FitnessChart
+            title="Power Clean (3RM)"
+            metricType="power_clean"
+            yAxisLabel="lbs"
+          />
+        </div>
+      </div>
     </div>
   );
 } 

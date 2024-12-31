@@ -97,7 +97,7 @@ export default function Home() {
             </div>
 
             <p className="text-xl text-gray-300 leading-relaxed max-w-3xl animate-vision" style={{ animationDelay: '0.4s' }}>
-              You&apos;ve got something special, Bert. Listen to god&apos;s plan for you. Relentlessly build your base, and relentlessly express your gifts.
+              You&apos;ve got something special, Bert. Listen to god&apos;s plan for you. Relentlessly build your base, then relentlessly express your gifts.
             </p>
           </section>
 
