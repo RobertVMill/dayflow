@@ -7,10 +7,12 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { LearningMetric, addLearningMetric, getLearningMetrics } from '../utils/learning-supabase';
+import { fetchGithubCommits } from '../utils/github';
 
 ChartJS.register(
   CategoryScale,
@@ -19,24 +21,46 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 interface LearningChartProps {
   title: string;
   metricType: LearningMetric['metric_type'];
   yAxisLabel: string;
+  options?: any;
 }
 
-function LearningChart({ title, metricType, yAxisLabel }: LearningChartProps) {
+function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }: LearningChartProps) {
   const [metrics, setMetrics] = useState<LearningMetric[]>([]);
+  const [githubMetrics, setGithubMetrics] = useState<{date: string, value: number}[]>([]);
   const [newValue, setNewValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    loadMetrics();
+    if (metricType === 'github_commits') {
+      loadGithubMetrics();
+    } else {
+      loadMetrics();
+    }
   }, [metricType]);
+
+  async function loadGithubMetrics() {
+    try {
+      const commits = await fetchGithubCommits();
+      const sortedCommits = Object.entries(commits)
+        .map(([date, value]) => ({ date, value }))
+        .sort((a, b) => a.date.localeCompare(b.date));
+      setGithubMetrics(sortedCommits);
+    } catch (err) {
+      setError('Failed to load GitHub commits');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   async function loadMetrics() {
     try {
@@ -55,27 +79,36 @@ function LearningChart({ title, metricType, yAxisLabel }: LearningChartProps) {
     if (!newValue) return;
 
     try {
-      await addLearningMetric(metricType, parseInt(newValue));
+      await addLearningMetric(metricType, parseFloat(newValue));
       setNewValue('');
       loadMetrics();
+      setError(null);
     } catch (err) {
-      setError('Failed to add metric');
+      setError(err instanceof Error ? err.message : 'Failed to add metric');
       console.error(err);
     }
   }
 
   const chartData = {
-    labels: metrics.map(m => {
-      const date = new Date(m.created_at);
-      // On mobile, show shorter date format
-      return window.innerWidth < 640 
-        ? `${date.getMonth() + 1}/${date.getDate()}`
-        : date.toLocaleDateString();
-    }),
+    labels: metricType === 'github_commits' 
+      ? githubMetrics.map(m => {
+          const date = new Date(m.date);
+          return window.innerWidth < 640 
+            ? `${date.getMonth() + 1}/${date.getDate()}`
+            : date.toLocaleDateString();
+        })
+      : metrics.map(m => {
+          const date = new Date(m.created_at);
+          return window.innerWidth < 640 
+            ? `${date.getMonth() + 1}/${date.getDate()}`
+            : date.toLocaleDateString();
+        }),
     datasets: [
       {
         label: title,
-        data: metrics.map(m => m.value),
+        data: metricType === 'github_commits' 
+          ? githubMetrics.map(m => m.value)
+          : metrics.map(m => m.value),
         borderColor: '#8B1E1E',
         backgroundColor: 'rgba(139, 30, 30, 0.1)',
         tension: 0.1,
@@ -84,7 +117,7 @@ function LearningChart({ title, metricType, yAxisLabel }: LearningChartProps) {
     ]
   };
 
-  const options = {
+  const defaultOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -104,7 +137,15 @@ function LearningChart({ title, metricType, yAxisLabel }: LearningChartProps) {
         titleColor: '#ffffff',
         bodyColor: '#ffffff',
         padding: 12,
-        displayColors: false
+        displayColors: false,
+        callbacks: {
+          label: function(context: any) {
+            if (metricType === 'github_commits') {
+              return `${context.raw} commits`;
+            }
+            return `${context.raw}${yAxisLabel}`;
+          }
+        }
       }
     },
     scales: {
@@ -119,12 +160,12 @@ function LearningChart({ title, metricType, yAxisLabel }: LearningChartProps) {
         },
         ticks: {
           color: '#ffffff',
-          stepSize: 1,
           font: {
             size: 10
           }
         },
-        beginAtZero: true
+        min: 0,
+        ...(chartOptions?.scales?.y || {})
       },
       x: {
         grid: {
@@ -150,25 +191,32 @@ function LearningChart({ title, metricType, yAxisLabel }: LearningChartProps) {
   return (
     <div className="w-full p-2 sm:p-4 bg-black/30 rounded-lg">
       <div className="h-[250px] sm:h-[300px] mb-4">
-        <Line data={chartData} options={options} />
+        <Line data={chartData} options={defaultOptions} />
       </div>
-      <form onSubmit={handleAddMetric} className="flex gap-1 sm:gap-2">
-        <input
-          type="number"
-          step="1"
-          min="0"
-          value={newValue}
-          onChange={(e) => setNewValue(e.target.value)}
-          placeholder={`Enter ${title.toLowerCase()}`}
-          className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#8B1E1E]/20 placeholder-gray-500"
-        />
-        <button
-          type="submit"
-          className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#8B1E1E] text-white rounded hover:bg-[#661616] transition-colors"
-        >
-          Add
-        </button>
-      </form>
+      {metricType !== 'github_commits' && (
+        <form onSubmit={handleAddMetric} className="flex flex-col gap-2">
+          <input
+            type="number"
+            step="1"
+            min="0"
+            value={newValue}
+            onChange={(e) => setNewValue(e.target.value)}
+            placeholder={`Enter ${title.toLowerCase()} (${yAxisLabel})`}
+            className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#8B1E1E]/20 placeholder-gray-500"
+          />
+          <button
+            type="submit"
+            className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#8B1E1E] text-white rounded hover:bg-[#661616] transition-colors"
+          >
+            Add
+          </button>
+        </form>
+      )}
+      {metricType === 'github_commits' && (
+        <div className="text-sm text-gray-400 text-center italic">
+          Commits are updated automatically when page loads
+        </div>
+      )}
     </div>
   );
 }
@@ -182,12 +230,22 @@ export default function LearningMetrics() {
           <LearningChart
             title="Pages Read"
             metricType="pages_read"
-            yAxisLabel="Pages"
+            yAxisLabel="pages"
           />
           <LearningChart
             title="GitHub Commits"
             metricType="github_commits"
-            yAxisLabel="Commits"
+            yAxisLabel="commits"
+            options={{
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1
+                  }
+                }
+              }
+            }}
           />
         </div>
       </div>

@@ -377,21 +377,6 @@ export default function BaseMetrics() {
         <h4 className="text-lg font-medium text-[#8B1E1E]/80 px-2 sm:px-0">Daily Goals</h4>
         <div className="space-y-4 sm:space-y-6">
           <BaseChart
-            title="GitHub Commits"
-            metricType="github_commits"
-            yAxisLabel="commits"
-            options={{
-              scales: {
-                y: {
-                  beginAtZero: true,
-                  ticks: {
-                    stepSize: 1
-                  }
-                }
-              }
-            }}
-          />
-          <BaseChart
             title="30 Minutes of Sunlight"
             metricType="sunlight"
             yAxisLabel=""
