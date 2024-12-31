@@ -12,7 +12,7 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
-export type MetricType = 'sleep_score' | 'sunlight' | 'water' | 'plant_based' | 'reliability' | 'savings' | 'meditation' | 'walking';
+export type MetricType = 'sleep_score' | 'sunlight' | 'water' | 'plant_based' | 'reliability' | 'savings' | 'meditation' | 'walking' | 'github_commits';
 
 export interface BaseMetric {
   id: string;
@@ -65,6 +65,11 @@ export async function addBaseMetric(
     case 'walking':
       if (value < 0) {
         throw new Error('Minutes cannot be negative');
+      }
+      break;
+    case 'github_commits':
+      if (value < 0) {
+        throw new Error('Commits cannot be negative');
       }
       break;
     default:

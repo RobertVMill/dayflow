@@ -7,6 +7,7 @@ import LearningMetrics from '../components/LearningMetrics';
 import EmpathyMetrics from '../components/EmpathyMetrics';
 import BaseMetrics from '../components/BaseMetrics';
 import JournalEntries from '../components/JournalEntries';
+import { fetchAndStoreGithubCommits } from '../utils/github';
 
 export default function Home() {
   const router = useRouter();
@@ -20,12 +21,26 @@ export default function Home() {
         router.push('/login');
       } else {
         setIsLoading(false);
+        // Fetch GitHub commits when the app loads
+        fetchAndStoreGithubCommits().catch(console.error);
       }
     } catch (err) {
       setError('Failed to initialize app');
       console.error(err);
     }
   }, [router]);
+
+  // Set up periodic GitHub commit fetching
+  useEffect(() => {
+    if (isLoading) return;
+
+    // Fetch commits every hour
+    const interval = setInterval(() => {
+      fetchAndStoreGithubCommits().catch(console.error);
+    }, 60 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   if (isLoading) {
     return <div className="flex items-center justify-center min-h-screen text-white">Loading...</div>;
