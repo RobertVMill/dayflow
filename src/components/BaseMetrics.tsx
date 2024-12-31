@@ -7,7 +7,8 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { BaseMetric, addBaseMetric, getBaseMetrics } from '../utils/base-supabase';
@@ -19,7 +20,8 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 interface BaseChartProps {
@@ -27,11 +29,21 @@ interface BaseChartProps {
   metricType: BaseMetric['metric_type'];
   yAxisLabel: string;
   isBinary?: boolean;
+  isPlantBased?: boolean;
 }
 
-function BaseChart({ title, metricType, yAxisLabel, isBinary = false }: BaseChartProps) {
+const PLANT_BASED_HABITS = [
+  'Fast til noon',
+  'No dairy',
+  'No sugar',
+  'No gluten',
+  'Plant-Based'
+];
+
+function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBased = false }: BaseChartProps) {
   const [metrics, setMetrics] = useState<BaseMetric[]>([]);
   const [newValue, setNewValue] = useState('');
+  const [selectedHabits, setSelectedHabits] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -53,18 +65,33 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false }: BaseChar
 
   async function handleAddMetric(e: React.FormEvent) {
     e.preventDefault();
-    if (!newValue) return;
+    if (isPlantBased && selectedHabits.length === 0) return;
+    if (!isPlantBased && !newValue) return;
 
     try {
-      const value = isBinary ? (newValue === 'yes' ? 1 : 0) : parseFloat(newValue);
-      await addBaseMetric(metricType, value);
-      setNewValue('');
+      if (isPlantBased) {
+        const value = selectedHabits.length * 20; // Each habit is worth 20%
+        await addBaseMetric(metricType, value, selectedHabits);
+        setSelectedHabits([]);
+      } else {
+        const value = isBinary ? (newValue === 'yes' ? 1 : 0) : parseFloat(newValue);
+        await addBaseMetric(metricType, value);
+        setNewValue('');
+      }
       loadMetrics();
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add metric');
       console.error(err);
     }
+  }
+
+  function handleHabitToggle(habit: string) {
+    setSelectedHabits(prev => 
+      prev.includes(habit)
+        ? prev.filter(h => h !== habit)
+        : [...prev, habit]
+    );
   }
 
   const chartData = {
@@ -110,6 +137,13 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false }: BaseChar
         displayColors: false,
         callbacks: {
           label: function(context: any) {
+            const metric = metrics[context.dataIndex];
+            if (isPlantBased && metric.habits) {
+              return [
+                `Score: ${context.raw}%`,
+                ...metric.habits.map(h => `✓ ${h}`)
+              ];
+            }
             if (isBinary) {
               return `${context.raw === 1 ? 'Yes' : 'No'}`;
             }
@@ -170,8 +204,27 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false }: BaseChar
       <div className="h-[250px] sm:h-[300px] mb-4">
         <Line data={chartData} options={options} />
       </div>
-      <form onSubmit={handleAddMetric} className="flex gap-1 sm:gap-2">
-        {isBinary ? (
+      <form onSubmit={handleAddMetric} className="flex flex-col gap-2">
+        {isPlantBased ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {PLANT_BASED_HABITS.map(habit => (
+                <label key={habit} className="flex items-center gap-2 text-white">
+                  <input
+                    type="checkbox"
+                    checked={selectedHabits.includes(habit)}
+                    onChange={() => handleHabitToggle(habit)}
+                    className="rounded border-[#8B1E1E]/20 bg-black/30 text-[#8B1E1E] focus:ring-[#8B1E1E]"
+                  />
+                  <span className="text-sm">{habit}</span>
+                </label>
+              ))}
+            </div>
+            <div className="text-right text-sm text-gray-400">
+              Score: {selectedHabits.length * 20}%
+            </div>
+          </>
+        ) : isBinary ? (
           <select
             value={newValue}
             onChange={(e) => setNewValue(e.target.value)}
@@ -196,7 +249,7 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false }: BaseChar
         )}
         <button
           type="submit"
-          className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#8B1E1E] text-white rounded hover:bg-[#661616] transition-colors"
+          className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#8B1E1E] text-white rounded hover:bg-[#661616] transition-colors"
         >
           Add
         </button>
@@ -233,6 +286,12 @@ export default function BaseMetrics() {
             metricType="water"
             yAxisLabel=""
             isBinary={true}
+          />
+          <BaseChart
+            title="Plant-Based Habits"
+            metricType="plant_based"
+            yAxisLabel="%"
+            isPlantBased={true}
           />
         </div>
       </div>
