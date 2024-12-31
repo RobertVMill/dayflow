@@ -31,6 +31,16 @@ export default function Navbar() {
             >
               Meals
             </Link>
+            <Link
+              href="/reminders"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                pathname === '/reminders'
+                  ? 'bg-[#8B1E1E] text-white'
+                  : 'text-gray-300 hover:bg-[#8B1E1E]/50 hover:text-white'
+              }`}
+            >
+              Reminders
+            </Link>
           </div>
         </div>
       </div>
