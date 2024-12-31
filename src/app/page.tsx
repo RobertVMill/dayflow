@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -31,98 +30,51 @@ export default function Home() {
           </p>
         </div>
 
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+        <div className="w-full max-w-2xl flex justify-center my-8">
+          <svg
+            viewBox="0 0 400 200"
+            className="w-full max-w-md h-auto stroke-current fill-none stroke-2"
+            style={{ strokeLinecap: 'round', strokeLinejoin: 'round' }}
+          >
+            {/* Ground Line */}
+            <path d="M 50 150 L 350 150" className="stroke-current" />
+            
+            {/* Foundation Base */}
+            <path d="M 100 150 L 300 150 L 280 170 L 120 170 Z" className="fill-foreground/10" />
+            
+            {/* Foundation Layers */}
+            <g className="stroke-current">
+              <path d="M 120 150 L 120 130" />
+              <path d="M 160 150 L 160 130" />
+              <path d="M 200 150 L 200 130" />
+              <path d="M 240 150 L 240 130" />
+              <path d="M 280 150 L 280 130" />
+            </g>
+            
+            {/* Foundation Top */}
+            <path d="M 100 130 L 300 130" className="stroke-current" />
+            
+            {/* Decorative Elements */}
+            <path d="M 80 150 C 80 100, 320 100, 320 150" className="stroke-current opacity-20" />
+            <path d="M 90 150 C 90 110, 310 110, 310 150" className="stroke-current opacity-30" />
+          </svg>
+        </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+        <div className="max-w-2xl text-center sm:text-left">
+          <h2 className="text-2xl font-semibold mb-4">Relentlessly strengthen the base</h2>
+          <ul className="list-none text-lg text-foreground/80 leading-relaxed space-y-2">
+            <li>Sleep</li>
+            <li>Workout</li>
+            <li>Sunlight</li>
+            <li>Water</li>
+            <li>Plants</li>
+            <li>Never letting people down</li>
+            <li>Savings</li>
+            <li>Meditation</li>
+            <li>Long Walks</li>
+          </ul>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
