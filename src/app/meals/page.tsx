@@ -100,7 +100,7 @@ export default function MealsPage() {
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-1 block w-full rounded bg-black/30 border border-[#8B1E1E]/20 text-white placeholder-gray-500 focus:ring-[#8B1E1E] focus:border-[#8B1E1E]"
+                  className="mt-1 block w-full rounded bg-black/30 border border-[#D47341]/20 text-white placeholder-gray-500 focus:ring-[#D47341] focus:border-[#D47341]"
                   placeholder="Enter meal name"
                 />
               </div>
@@ -113,7 +113,7 @@ export default function MealsPage() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   rows={3}
-                  className="mt-1 block w-full rounded bg-black/30 border border-[#8B1E1E]/20 text-white placeholder-gray-500 focus:ring-[#8B1E1E] focus:border-[#8B1E1E]"
+                  className="mt-1 block w-full rounded bg-black/30 border border-[#D47341]/20 text-white placeholder-gray-500 focus:ring-[#D47341] focus:border-[#D47341]"
                   placeholder="Enter meal description"
                 />
               </div>
@@ -126,14 +126,14 @@ export default function MealsPage() {
                   value={benefits}
                   onChange={(e) => setBenefits(e.target.value)}
                   rows={3}
-                  className="mt-1 block w-full rounded bg-black/30 border border-[#8B1E1E]/20 text-white placeholder-gray-500 focus:ring-[#8B1E1E] focus:border-[#8B1E1E]"
+                  className="mt-1 block w-full rounded bg-black/30 border border-[#D47341]/20 text-white placeholder-gray-500 focus:ring-[#D47341] focus:border-[#D47341]"
                   placeholder="Enter meal benefits"
                 />
               </div>
               <div className="flex gap-4">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-[#8B1E1E] text-white rounded hover:bg-[#661616] transition-colors"
+                  className="flex-1 px-4 py-2 bg-[#D47341] text-white rounded hover:bg-[#B85C2C] transition-colors"
                 >
                   {editingMeal ? 'Update Meal' : 'Add Meal'}
                 </button>

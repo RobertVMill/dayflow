@@ -59,14 +59,18 @@ export default function Home() {
             <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent animate-vision">Vision</h1>
             
             {/* Vision SVG */}
-            <div className="w-full max-w-2xl mx-auto py-8 animate-vision" style={{ animationDelay: '0.2s' }}>
+            <div className="w-full max-w-3xl mx-auto py-12 animate-vision" style={{ animationDelay: '0.2s' }}>
               <svg
                 viewBox="0 0 400 200"
-                className="w-full h-auto stroke-[#8B1E1E] fill-none stroke-2"
-                style={{ strokeLinecap: 'round', strokeLinejoin: 'round' }}
+                className="w-full h-auto stroke-[#D47341] fill-none stroke-[3]"
+                style={{ 
+                  strokeLinecap: 'round', 
+                  strokeLinejoin: 'round',
+                  filter: 'drop-shadow(0 0 8px rgba(212, 115, 65, 0.3))'
+                }}
               >
                 {/* Divine Light Rays */}
-                <g className="stroke-[#8B1E1E]/30">
+                <g className="stroke-[#D47341]/50">
                   <path d="M 200 40 L 200 10" />
                   <path d="M 180 45 L 170 15" />
                   <path d="M 220 45 L 230 15" />
@@ -79,35 +83,35 @@ export default function Home() {
                   cx="200" 
                   cy="80" 
                   r="30" 
-                  className="fill-[#8B1E1E]/10 stroke-[#8B1E1E]" 
+                  className="fill-[#D47341]/20 stroke-[#D47341]" 
                 />
 
                 {/* Person Silhouette */}
                 <path 
                   d="M 185 140 C 185 120, 215 120, 215 140" 
-                  className="stroke-[#8B1E1E]" 
+                  className="stroke-[#D47341]" 
                 />
                 <circle 
                   cx="200" 
                   cy="110" 
                   r="10" 
-                  className="fill-[#8B1E1E]/10 stroke-[#8B1E1E]" 
+                  className="fill-[#D47341]/20 stroke-[#D47341]" 
                 />
 
                 {/* Growth Path */}
                 <path 
                   d="M 200 150 C 200 180, 140 170, 120 150" 
-                  className="stroke-[#8B1E1E]" 
+                  className="stroke-[#D47341]" 
                 />
                 <path 
                   d="M 200 150 C 200 180, 260 170, 280 150" 
-                  className="stroke-[#8B1E1E]" 
+                  className="stroke-[#D47341]" 
                 />
 
                 {/* Decorative Elements */}
                 <path 
                   d="M 100 180 C 100 100, 300 100, 300 180" 
-                  className="stroke-[#8B1E1E]/20" 
+                  className="stroke-[#D47341]/40" 
                 />
               </svg>
             </div>
@@ -127,8 +131,12 @@ export default function Home() {
             <div className="w-full max-w-2xl mx-auto py-8">
               <svg
                 viewBox="0 0 400 200"
-                className="w-full h-auto stroke-[#8B1E1E] fill-none stroke-2"
-                style={{ strokeLinecap: 'round', strokeLinejoin: 'round' }}
+                className="w-full h-auto stroke-[#D47341] fill-none stroke-[3]"
+                style={{ 
+                  strokeLinecap: 'round', 
+                  strokeLinejoin: 'round',
+                  filter: 'drop-shadow(0 0 8px rgba(212, 115, 65, 0.3))'
+                }}
               >
                 {/* Ground Line */}
                 <path d="M 50 150 L 350 150" className="stroke-white/20" />
@@ -136,11 +144,11 @@ export default function Home() {
                 {/* Foundation Base */}
                 <path 
                   d="M 100 150 L 300 150 L 280 180 L 120 180 Z" 
-                  className="fill-[#8B1E1E]/10 stroke-[#8B1E1E]" 
+                  className="fill-[#D47341]/20 stroke-[#D47341]" 
                 />
                 
                 {/* Support Lines */}
-                <g className="stroke-[#8B1E1E]">
+                <g className="stroke-[#D47341]">
                   <path d="M 120 150 L 120 130" />
                   <path d="M 160 150 L 160 130" />
                   <path d="M 200 150 L 200 130" />
@@ -149,16 +157,16 @@ export default function Home() {
                 </g>
                 
                 {/* Foundation Top */}
-                <path d="M 100 130 L 300 130" className="stroke-[#8B1E1E]" />
+                <path d="M 100 130 L 300 130" className="stroke-[#D47341]" />
                 
                 {/* Decorative Growth Lines */}
                 <path 
                   d="M 80 150 C 80 100, 320 100, 320 150" 
-                  className="stroke-[#8B1E1E]/30" 
+                  className="stroke-[#D47341]/30" 
                 />
                 <path 
                   d="M 90 150 C 90 110, 310 110, 310 150" 
-                  className="stroke-[#8B1E1E]/20" 
+                  className="stroke-[#D47341]/20" 
                 />
               </svg>
             </div>
@@ -184,31 +192,35 @@ export default function Home() {
             <div className="w-full max-w-2xl mx-auto py-8">
               <svg
                 viewBox="0 0 400 200"
-                className="w-full h-auto stroke-[#8B1E1E] fill-none stroke-2"
-                style={{ strokeLinecap: 'round', strokeLinejoin: 'round' }}
+                className="w-full h-auto stroke-[#D47341] fill-none stroke-[3]"
+                style={{ 
+                  strokeLinecap: 'round', 
+                  strokeLinejoin: 'round',
+                  filter: 'drop-shadow(0 0 8px rgba(212, 115, 65, 0.3))'
+                }}
               >
                 {/* Central Growth Line */}
                 <path 
                   d="M 200 180 L 200 40" 
-                  className="stroke-[#8B1E1E]" 
+                  className="stroke-[#D47341]" 
                 />
                 
                 {/* Diverging Paths */}
-                <g className="stroke-[#8B1E1E]">
+                <g className="stroke-[#D47341]">
                   <path d="M 200 120 L 140 60" />
                   <path d="M 200 120 L 260 60" />
                   <path d="M 200 120 L 200 60" />
                 </g>
 
                 {/* Path Endpoints */}
-                <g className="fill-[#8B1E1E]">
+                <g className="fill-[#D47341]">
                   <circle cx="140" cy="60" r="4" />
                   <circle cx="200" cy="40" r="4" />
                   <circle cx="260" cy="60" r="4" />
                 </g>
 
                 {/* Decorative Elements */}
-                <g className="stroke-[#8B1E1E]/30">
+                <g className="stroke-[#D47341]/30">
                   <path d="M 160 180 C 160 140, 240 140, 240 180" />
                   <path d="M 120 180 C 120 100, 280 100, 280 180" />
                 </g>
@@ -225,7 +237,7 @@ export default function Home() {
             <div className="space-y-12">
               {/* Fitness Section */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-medium text-[#8B1E1E]">Fitness</h3>
+                <h3 className="text-2xl font-medium text-[#D47341]">Fitness</h3>
                 <p className="text-lg text-gray-300">
                   Fitness is the hidden superpower because it lets you do 10x more for 10x longer.
                 </p>
@@ -236,7 +248,7 @@ export default function Home() {
 
               {/* Learning Section */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-medium text-[#8B1E1E]">Learning</h3>
+                <h3 className="text-2xl font-medium text-[#D47341]">Learning</h3>
                 <p className="text-lg text-gray-300">
                   The best learner is the best earner.
                 </p>
@@ -247,7 +259,7 @@ export default function Home() {
 
               {/* Empathy Section */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-medium text-[#8B1E1E]">Empathy</h3>
+                <h3 className="text-2xl font-medium text-[#D47341]">Empathy</h3>
                 <p className="text-lg text-gray-300">
                   Building an empathy is an absolute super power for making friends, money, and fullfillment.
                 </p>
@@ -268,23 +280,27 @@ export default function Home() {
             <div className="w-full max-w-2xl mx-auto py-8">
               <svg
                 viewBox="0 0 400 200"
-                className="w-full h-auto stroke-[#8B1E1E] fill-none stroke-2"
-                style={{ strokeLinecap: 'round', strokeLinejoin: 'round' }}
+                className="w-full h-auto stroke-[#D47341] fill-none stroke-[3]"
+                style={{ 
+                  strokeLinecap: 'round', 
+                  strokeLinejoin: 'round',
+                  filter: 'drop-shadow(0 0 8px rgba(212, 115, 65, 0.3))'
+                }}
               >
                 {/* Journal Book Shape */}
                 <path 
                   d="M 100 50 L 300 50 L 300 150 L 100 150 Z" 
-                  className="fill-[#8B1E1E]/10 stroke-[#8B1E1E]" 
+                  className="fill-[#D47341]/20 stroke-[#D47341]" 
                 />
                 
                 {/* Journal Binding */}
                 <path 
                   d="M 90 45 L 90 155 C 90 155, 100 150, 100 150 L 100 50 C 100 50, 90 45, 90 45" 
-                  className="fill-[#8B1E1E]/20 stroke-[#8B1E1E]" 
+                  className="fill-[#D47341]/30 stroke-[#D47341]" 
                 />
                 
                 {/* Journal Lines */}
-                <g className="stroke-[#8B1E1E]/30">
+                <g className="stroke-[#D47341]/50">
                   <path d="M 120 70 L 280 70" />
                   <path d="M 120 90 L 280 90" />
                   <path d="M 120 110 L 280 110" />
@@ -294,7 +310,7 @@ export default function Home() {
                 {/* Decorative Elements */}
                 <path 
                   d="M 150 40 C 150 30, 250 30, 250 40" 
-                  className="stroke-[#8B1E1E]/20" 
+                  className="stroke-[#D47341]/40" 
                 />
               </svg>
             </div>

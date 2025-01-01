@@ -5,35 +5,56 @@
 :root {
   --background: #000000;
   --foreground: #ffffff;
-  --accent: #8B1E1E;
-  --accent-dark: #661616;
+  --accent: #8A4726;
+  --accent-dark: #5C2E17;
   --secondary: #1c1c1e;
 }
 
-body {
-  @apply bg-gradient-to-br from-black via-[#1c1c1e] to-black text-white min-h-screen;
-}
-
-.section-gradient {
-  @apply relative;
-}
-
-.section-gradient::before {
-  content: '';
-  @apply absolute top-0 right-0 w-full h-full bg-gradient-to-br from-[#8B1E1E]/20 via-transparent to-transparent opacity-50 pointer-events-none -z-10;
-}
-
-@keyframes fadeSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-[#1c1c1e] via-black to-[#1c1c1e] text-white min-h-screen;
   }
 }
 
-.animate-vision {
-  animation: fadeSlideIn 1s ease-out forwards;
+@layer components {
+  .section-gradient {
+    @apply relative;
+  }
+
+  .section-gradient::before {
+    content: '';
+    @apply absolute top-0 right-0 w-full h-full bg-gradient-to-br from-[#8A4726]/20 via-transparent to-transparent opacity-50 pointer-events-none -z-10;
+  }
+
+  @keyframes fadeSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-vision {
+    animation: fadeSlideIn 1s ease-out forwards;
+  }
+
+  /* Add visionOS-style glass effect */
+  .glass-effect {
+    @apply bg-black/20 backdrop-blur-lg border border-white/10;
+  }
+
+  /* Add visionOS-style button effect */
+  .vision-button {
+    @apply bg-[#8A4726] hover:bg-[#5C2E17] text-white transition-all duration-200 
+           backdrop-blur-sm shadow-lg hover:shadow-xl active:scale-95;
+  }
+
+  /* Add visionOS-style card effect */
+  .vision-card {
+    @apply bg-black/20 backdrop-blur-lg border border-white/10 rounded-xl
+           shadow-lg hover:shadow-xl transition-all duration-200;
+  }
 }

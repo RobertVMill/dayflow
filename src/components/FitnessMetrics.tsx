@@ -4,7 +4,7 @@ export default function FitnessMetrics() {
   return (
     <div className="w-full grid gap-6 sm:gap-8 -mx-2 sm:mx-0">
       <div className="space-y-4 sm:space-y-6">
-        <h4 className="text-lg font-medium text-[#8B1E1E]/80 px-2 sm:px-0">Heart Health</h4>
+        <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Heart Health</h4>
         <div className="space-y-4 sm:space-y-6">
           <FitnessChart
             title="Resting Heart Rate"
@@ -20,7 +20,7 @@ export default function FitnessMetrics() {
       </div>
 
       <div className="space-y-4 sm:space-y-6">
-        <h4 className="text-lg font-medium text-[#8B1E1E]/80 px-2 sm:px-0">Cardio</h4>
+        <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Cardio</h4>
         <FitnessChart
           title="Running Pace"
           metricType="running_pace"
@@ -29,7 +29,7 @@ export default function FitnessMetrics() {
       </div>
 
       <div className="space-y-4 sm:space-y-6">
-        <h4 className="text-lg font-medium text-[#8B1E1E]/80 px-2 sm:px-0">Strength</h4>
+        <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Strength</h4>
         <div className="space-y-4 sm:space-y-6">
           <FitnessChart
             title="Bench Press (3RM)"

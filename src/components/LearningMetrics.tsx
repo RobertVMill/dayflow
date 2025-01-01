@@ -109,8 +109,8 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
         data: metricType === 'github_commits' 
           ? githubMetrics.map(m => m.value)
           : metrics.map(m => m.value),
-        borderColor: '#8B1E1E',
-        backgroundColor: 'rgba(139, 30, 30, 0.1)',
+        borderColor: '#D47341',
+        backgroundColor: 'rgba(212, 115, 65, 0.1)',
         tension: 0.1,
         fill: true
       }
@@ -202,11 +202,11 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
             value={newValue}
             onChange={(e) => setNewValue(e.target.value)}
             placeholder={`Enter ${title.toLowerCase()} (${yAxisLabel})`}
-            className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#8B1E1E]/20 placeholder-gray-500"
+            className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500"
           />
           <button
             type="submit"
-            className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#8B1E1E] text-white rounded hover:bg-[#661616] transition-colors"
+            className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#D47341] text-white rounded hover:bg-[#B85C2C] transition-colors"
           >
             Add
           </button>
@@ -225,7 +225,7 @@ export default function LearningMetrics() {
   return (
     <div className="w-full grid gap-6 sm:gap-8 -mx-2 sm:mx-0">
       <div className="space-y-4 sm:space-y-6">
-        <h4 className="text-lg font-medium text-[#8B1E1E]/80 px-2 sm:px-0">Reading & Development</h4>
+        <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Reading & Development</h4>
         <div className="space-y-4 sm:space-y-6">
           <LearningChart
             title="Pages Read"
