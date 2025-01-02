@@ -1,11 +1,13 @@
 import { supabase } from './supabase';
 
-export type EmpathyMetric = {
-  id: number;
+export type MetricType = 'good_deeds' | 'connections';
+
+export interface EmpathyMetric {
+  id: string;
   created_at: string;
-  metric_type: 'good_deeds' | 'connecting_time';
+  metric_type: MetricType;
   value: number;
-};
+}
 
 export async function addEmpathyMetric(type: EmpathyMetric['metric_type'], value: number) {
   const { data, error } = await supabase

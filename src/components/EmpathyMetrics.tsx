@@ -7,7 +7,8 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { EmpathyMetric, addEmpathyMetric, getEmpathyMetrics } from '../utils/empathy-supabase';
@@ -19,16 +20,18 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 interface EmpathyChartProps {
   title: string;
   metricType: EmpathyMetric['metric_type'];
   yAxisLabel: string;
+  options?: any;
 }
 
-function EmpathyChart({ title, metricType, yAxisLabel }: EmpathyChartProps) {
+function EmpathyChart({ title, metricType, yAxisLabel, options: chartOptions }: EmpathyChartProps) {
   const [metrics, setMetrics] = useState<EmpathyMetric[]>([]);
   const [newValue, setNewValue] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -42,6 +45,7 @@ function EmpathyChart({ title, metricType, yAxisLabel }: EmpathyChartProps) {
     try {
       const data = await getEmpathyMetrics(metricType);
       setMetrics(data);
+      setError(null);
     } catch (err) {
       setError('Failed to load metrics');
       console.error(err);
@@ -55,11 +59,12 @@ function EmpathyChart({ title, metricType, yAxisLabel }: EmpathyChartProps) {
     if (!newValue) return;
 
     try {
-      await addEmpathyMetric(metricType, parseInt(newValue));
+      await addEmpathyMetric(metricType, parseFloat(newValue));
       setNewValue('');
       loadMetrics();
+      setError(null);
     } catch (err) {
-      setError('Failed to add metric');
+      setError(err instanceof Error ? err.message : 'Failed to add metric');
       console.error(err);
     }
   }
@@ -67,7 +72,6 @@ function EmpathyChart({ title, metricType, yAxisLabel }: EmpathyChartProps) {
   const chartData = {
     labels: metrics.map(m => {
       const date = new Date(m.created_at);
-      // On mobile, show shorter date format
       return window.innerWidth < 640 
         ? `${date.getMonth() + 1}/${date.getDate()}`
         : date.toLocaleDateString();
@@ -84,9 +88,10 @@ function EmpathyChart({ title, metricType, yAxisLabel }: EmpathyChartProps) {
     ]
   };
 
-  const options = {
+  const defaultOptions = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
+    aspectRatio: 1,
     plugins: {
       legend: {
         display: false
@@ -96,15 +101,28 @@ function EmpathyChart({ title, metricType, yAxisLabel }: EmpathyChartProps) {
         text: title,
         color: '#ffffff',
         font: {
-          size: 16
+          size: 14
+        },
+        padding: {
+          top: 10,
+          bottom: 10
         }
       },
       tooltip: {
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         titleColor: '#ffffff',
         bodyColor: '#ffffff',
-        padding: 12,
-        displayColors: false
+        padding: 8,
+        displayColors: false,
+        callbacks: {
+          label: function(context: any) {
+            const count = context.raw;
+            if (metricType === 'connections') {
+              return `${count} ${count === 1 ? 'activity' : 'activities'}`;
+            }
+            return `${count} ${yAxisLabel}`;
+          }
+        }
       }
     },
     scales: {
@@ -112,19 +130,24 @@ function EmpathyChart({ title, metricType, yAxisLabel }: EmpathyChartProps) {
         title: {
           display: true,
           text: yAxisLabel,
-          color: '#ffffff'
+          color: '#ffffff',
+          font: {
+            size: 10
+          }
         },
         grid: {
           color: 'rgba(255, 255, 255, 0.1)'
         },
         ticks: {
           color: '#ffffff',
-          stepSize: 1,
           font: {
-            size: 10
-          }
+            size: 9
+          },
+          stepSize: 1,
+          beginAtZero: true
         },
-        beginAtZero: true
+        min: 0,
+        ...(chartOptions?.scales?.y || {})
       },
       x: {
         grid: {
@@ -137,7 +160,7 @@ function EmpathyChart({ title, metricType, yAxisLabel }: EmpathyChartProps) {
           autoSkip: true,
           maxTicksLimit: 6,
           font: {
-            size: 10
+            size: 9
           }
         }
       }
@@ -149,22 +172,22 @@ function EmpathyChart({ title, metricType, yAxisLabel }: EmpathyChartProps) {
 
   return (
     <div className="w-full p-2 sm:p-4 bg-black/30 rounded-lg">
-      <div className="h-[250px] sm:h-[300px] mb-4">
-        <Line data={chartData} options={options} />
+      <div className="aspect-square">
+        <Line data={chartData} options={defaultOptions} />
       </div>
-      <form onSubmit={handleAddMetric} className="flex gap-1 sm:gap-2">
+      <form onSubmit={handleAddMetric} className="flex flex-col gap-2 mt-4">
         <input
           type="number"
           step="1"
           min="0"
           value={newValue}
           onChange={(e) => setNewValue(e.target.value)}
-          placeholder={`Enter ${title.toLowerCase()}`}
-          className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500"
+          placeholder={`Enter ${title.toLowerCase()} (${yAxisLabel})`}
+          className="flex-1 p-2 text-sm rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500"
         />
         <button
           type="submit"
-          className="px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#D47341] text-white rounded hover:bg-[#B85C2C] transition-colors"
+          className="w-full px-3 py-2 text-sm bg-[#D47341] text-white rounded hover:bg-[#B85C2C] transition-colors"
         >
           Add
         </button>
@@ -178,16 +201,26 @@ export default function EmpathyMetrics() {
     <div className="w-full grid gap-6 sm:gap-8 -mx-2 sm:mx-0">
       <div className="space-y-4 sm:space-y-6">
         <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Connection & Impact</h4>
-        <div className="space-y-4 sm:space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <EmpathyChart
             title="Good Deeds Done"
             metricType="good_deeds"
-            yAxisLabel="Deeds"
+            yAxisLabel="deeds"
           />
           <EmpathyChart
-            title="Connecting Time"
-            metricType="connecting_time"
-            yAxisLabel="Minutes"
+            title="Deep Connections"
+            metricType="connections"
+            yAxisLabel="activities"
+            options={{
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1
+                  }
+                }
+              }
+            }}
           />
         </div>
       </div>
