@@ -52,6 +52,16 @@ export default function Navbar() {
               Groceries
             </Link>
             <Link
+              href="/wishlist"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                pathname === '/wishlist'
+                  ? 'bg-vision-primary text-white shadow-lg'
+                  : 'text-gray-300 hover:bg-white/5 hover:text-white'
+              }`}
+            >
+              Wishlist
+            </Link>
+            <Link
               href="/reminders"
               className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                 pathname === '/reminders'
