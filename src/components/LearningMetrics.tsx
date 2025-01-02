@@ -8,17 +8,20 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
+  BarElement
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { LearningMetric, addLearningMetric, getLearningMetrics } from '../utils/learning-supabase';
+import { Line, Bar } from 'react-chartjs-2';
+import { LearningMetric, getLearningMetrics } from '../utils/learning-supabase';
 import { fetchGithubCommits } from '../utils/github';
+import { getBooksPerMonth } from '../utils/books-supabase';
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
@@ -27,15 +30,13 @@ ChartJS.register(
 
 interface LearningChartProps {
   title: string;
-  metricType: LearningMetric['metric_type'];
+  metricType: 'books_per_month' | 'github_commits';
   yAxisLabel: string;
   options?: any;
 }
 
 function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }: LearningChartProps) {
-  const [metrics, setMetrics] = useState<LearningMetric[]>([]);
-  const [githubMetrics, setGithubMetrics] = useState<{date: string, value: number}[]>([]);
-  const [newValue, setNewValue] = useState('');
+  const [metrics, setMetrics] = useState<{date: string, count: number}[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,7 +44,7 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
     if (metricType === 'github_commits') {
       loadGithubMetrics();
     } else {
-      loadMetrics();
+      loadBookMetrics();
     }
   }, [metricType]);
 
@@ -51,9 +52,9 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
     try {
       const commits = await fetchGithubCommits();
       const sortedCommits = Object.entries(commits)
-        .map(([date, value]) => ({ date, value }))
+        .map(([date, value]) => ({ date, count: value }))
         .sort((a, b) => a.date.localeCompare(b.date));
-      setGithubMetrics(sortedCommits);
+      setMetrics(sortedCommits);
     } catch (err) {
       setError('Failed to load GitHub commits');
       console.error(err);
@@ -62,55 +63,35 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
     }
   }
 
-  async function loadMetrics() {
+  async function loadBookMetrics() {
     try {
-      const data = await getLearningMetrics(metricType);
+      const data = await getBooksPerMonth();
       setMetrics(data);
     } catch (err) {
-      setError('Failed to load metrics');
+      setError('Failed to load book metrics');
       console.error(err);
     } finally {
       setIsLoading(false);
     }
   }
 
-  async function handleAddMetric(e: React.FormEvent) {
-    e.preventDefault();
-    if (!newValue) return;
-
-    try {
-      await addLearningMetric(metricType, parseFloat(newValue));
-      setNewValue('');
-      loadMetrics();
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add metric');
-      console.error(err);
-    }
-  }
-
   const chartData = {
-    labels: metricType === 'github_commits' 
-      ? githubMetrics.map(m => {
-          const date = new Date(m.date);
-          return window.innerWidth < 640 
-            ? `${date.getMonth() + 1}/${date.getDate()}`
-            : date.toLocaleDateString();
-        })
-      : metrics.map(m => {
-          const date = new Date(m.created_at);
-          return window.innerWidth < 640 
-            ? `${date.getMonth() + 1}/${date.getDate()}`
-            : date.toLocaleDateString();
-        }),
+    labels: metrics.map(m => {
+      const [year, month] = m.date.split('-').map(Number);
+      const date = new Date(year, month - 1);
+      
+      return window.innerWidth < 640 
+        ? `${month}/${year.toString().slice(2)}`
+        : date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+    }),
     datasets: [
       {
         label: title,
-        data: metricType === 'github_commits' 
-          ? githubMetrics.map(m => m.value)
-          : metrics.map(m => m.value),
+        data: metrics.map(m => m.count),
         borderColor: '#D47341',
-        backgroundColor: 'rgba(212, 115, 65, 0.1)',
+        backgroundColor: metricType === 'books_per_month' 
+          ? 'rgba(212, 115, 65, 0.8)'
+          : 'rgba(212, 115, 65, 0.1)',
         tension: 0.1,
         fill: true
       }
@@ -119,7 +100,8 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
 
   const defaultOptions = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
+    aspectRatio: 1,
     plugins: {
       legend: {
         display: false
@@ -129,21 +111,26 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
         text: title,
         color: '#ffffff',
         font: {
-          size: 16
+          size: 14
+        },
+        padding: {
+          top: 10,
+          bottom: 10
         }
       },
       tooltip: {
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
         titleColor: '#ffffff',
         bodyColor: '#ffffff',
-        padding: 12,
+        padding: 8,
         displayColors: false,
         callbacks: {
           label: function(context: any) {
+            const count = context.raw;
             if (metricType === 'github_commits') {
-              return `${context.raw} commits`;
+              return `${count} commits`;
             }
-            return `${context.raw}${yAxisLabel}`;
+            return `${count} ${count === 1 ? 'book' : 'books'}`;
           }
         }
       }
@@ -153,7 +140,10 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
         title: {
           display: true,
           text: yAxisLabel,
-          color: '#ffffff'
+          color: '#ffffff',
+          font: {
+            size: 10
+          }
         },
         grid: {
           color: 'rgba(255, 255, 255, 0.1)'
@@ -161,8 +151,10 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
         ticks: {
           color: '#ffffff',
           font: {
-            size: 10
-          }
+            size: 9
+          },
+          stepSize: 1,
+          beginAtZero: true
         },
         min: 0,
         ...(chartOptions?.scales?.y || {})
@@ -178,7 +170,7 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
           autoSkip: true,
           maxTicksLimit: 6,
           font: {
-            size: 10
+            size: 9
           }
         }
       }
@@ -188,32 +180,15 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
   if (isLoading) return <div className="text-center py-4">Loading...</div>;
   if (error) return <div className="text-red-500 bg-red-500/10 p-4 rounded-lg">{error}</div>;
 
+  const ChartComponent = metricType === 'books_per_month' ? Bar : Line;
+
   return (
     <div className="w-full p-2 sm:p-4 bg-black/30 rounded-lg">
-      <div className="h-[250px] sm:h-[300px] mb-4">
-        <Line data={chartData} options={defaultOptions} />
+      <div className="aspect-square">
+        <ChartComponent data={chartData} options={defaultOptions} />
       </div>
-      {metricType !== 'github_commits' && (
-        <form onSubmit={handleAddMetric} className="flex flex-col gap-2">
-          <input
-            type="number"
-            step="1"
-            min="0"
-            value={newValue}
-            onChange={(e) => setNewValue(e.target.value)}
-            placeholder={`Enter ${title.toLowerCase()} (${yAxisLabel})`}
-            className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500"
-          />
-          <button
-            type="submit"
-            className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#D47341] text-white rounded hover:bg-[#B85C2C] transition-colors"
-          >
-            Add
-          </button>
-        </form>
-      )}
       {metricType === 'github_commits' && (
-        <div className="text-sm text-gray-400 text-center italic">
+        <div className="text-xs text-gray-400 text-center italic mt-4">
           Commits are updated automatically when page loads
         </div>
       )}
@@ -226,11 +201,11 @@ export default function LearningMetrics() {
     <div className="w-full grid gap-6 sm:gap-8 -mx-2 sm:mx-0">
       <div className="space-y-4 sm:space-y-6">
         <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Reading & Development</h4>
-        <div className="space-y-4 sm:space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <LearningChart
-            title="Pages Read"
-            metricType="pages_read"
-            yAxisLabel="pages"
+            title="Books Read"
+            metricType="books_per_month"
+            yAxisLabel="books"
           />
           <LearningChart
             title="GitHub Commits"

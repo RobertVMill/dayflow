@@ -65,82 +65,64 @@ export default function JournalEntries() {
         </div>
       )}
 
-      <div className="space-y-3">
+      <div className="space-y-6">
         <div>
-          <label className="block text-[#D47341] px-2 mb-1 text-base">
-            I'm so blessed today for
-          </label>
+          <label className="block text-[#D47341] text-lg mb-2">I'm so blessed today for</label>
           <textarea
             value={entry.blessings}
             onChange={(e) => handleChange('blessings', e.target.value)}
-            className="w-full h-24 bg-black/30 border-y border-[#D47341]/20 p-2 text-white text-base"
             placeholder="List your blessings..."
-            required
+            className="w-full h-32 p-3 rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500 focus:ring-[#D47341] focus:border-[#D47341]"
           />
         </div>
 
         <div>
-          <label className="block text-[#D47341] px-2 mb-1 text-base">
-            I have so much to give today including
-          </label>
+          <label className="block text-[#D47341] text-lg mb-2">Good deeds I will do today</label>
           <textarea
             value={entry.contributions}
             onChange={(e) => handleChange('contributions', e.target.value)}
-            className="w-full h-24 bg-black/30 border-y border-[#D47341]/20 p-2 text-white text-base"
-            placeholder="List what you can contribute..."
-            required
+            placeholder="List specific ways you'll go above and beyond for others today..."
+            className="w-full h-32 p-3 rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500 focus:ring-[#D47341] focus:border-[#D47341]"
           />
         </div>
 
         <div>
-          <label className="block text-[#D47341] px-2 mb-1 text-base">
-            I have so much to improve my fitness including
-          </label>
+          <label className="block text-[#D47341] text-lg mb-2">How I will chisel my physique today</label>
           <textarea
             value={entry.fitness_improvements}
             onChange={(e) => handleChange('fitness_improvements', e.target.value)}
-            className="w-full h-24 bg-black/30 border-y border-[#D47341]/20 p-2 text-white text-base"
-            placeholder="List your fitness goals for today..."
-            required
+            placeholder="Example: Upper body lift in the morning, yoga or running or squash/tennis in the evening..."
+            className="w-full h-32 p-3 rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500 focus:ring-[#D47341] focus:border-[#D47341]"
           />
         </div>
 
         <div>
-          <label className="block text-[#D47341] px-2 mb-1 text-base">
-            I have so much to improve my microbiome today including
-          </label>
+          <label className="block text-[#D47341] text-lg mb-2">How I will cultivate an extremely powerful microbiome</label>
           <textarea
             value={entry.microbiome_improvements}
             onChange={(e) => handleChange('microbiome_improvements', e.target.value)}
-            className="w-full h-24 bg-black/30 border-y border-[#D47341]/20 p-2 text-white text-base"
-            placeholder="List your microbiome improvements..."
-            required
+            placeholder="List the specific foods and activities that will build your strongest microbiome today..."
+            className="w-full h-32 p-3 rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500 focus:ring-[#D47341] focus:border-[#D47341]"
           />
         </div>
 
         <div>
-          <label className="block text-[#D47341] px-2 mb-1 text-base">
-            I have so much to improve my craft including
-          </label>
+          <label className="block text-[#D47341] text-lg mb-2">How I will beat on my craft today</label>
           <textarea
             value={entry.craft_improvements}
             onChange={(e) => handleChange('craft_improvements', e.target.value)}
-            className="w-full h-24 bg-black/30 border-y border-[#D47341]/20 p-2 text-white text-base"
-            placeholder="List your craft improvements..."
-            required
+            placeholder="List the specific activities you'll do to relentlessly improve as a product manager today..."
+            className="w-full h-32 p-3 rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500 focus:ring-[#D47341] focus:border-[#D47341]"
           />
         </div>
 
         <div>
-          <label className="block text-[#D47341] px-2 mb-1 text-base">
-            I'm going to put it all together and have my best day by
-          </label>
+          <label className="block text-[#D47341] text-lg mb-2">How I will put it all together and make the most out of today</label>
           <textarea
             value={entry.best_day_plan}
             onChange={(e) => handleChange('best_day_plan', e.target.value)}
-            className="w-full h-24 bg-black/30 border-y border-[#D47341]/20 p-2 text-white text-base"
-            placeholder="Describe your plan for the best day..."
-            required
+            placeholder="Describe your specific plan to maximize every moment of today..."
+            className="w-full h-32 p-3 rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500 focus:ring-[#D47341] focus:border-[#D47341]"
           />
         </div>
       </div>

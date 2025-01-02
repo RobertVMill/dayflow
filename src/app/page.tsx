@@ -73,7 +73,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-semibold text-white mb-2">Success is a life full of <span className="text-pink-400">LOVE</span>, <span className="text-yellow-400">ENERGY</span>, <span className="text-emerald-400">ENTHUSIASM</span>, and <span className="text-[#D47341]">EXCITEMENT</span>. You achieve these by fully expressing your gifts to the world and keeping your heart open to possibility.</h3>
+                  <h3 className="text-2xl font-semibold text-white mb-2">Success is a life full of <span className="text-pink-400">LOVE</span>, <span className="text-yellow-400">ENERGY</span>, <span className="text-emerald-400">ENTHUSIASM</span>, and <span className="text-[#D47341]">EXCITEMENT</span>. You achieve these by fully expressing your gifts to the worldthrough the pain and keeping your heart open to possibility.</h3>
                 </div>
               </div>
 
@@ -92,19 +92,19 @@ export default function Home() {
                   <ul className="space-y-4 text-xl text-gray-300">
                     <li className="flex items-start space-x-3">
                       <span className="text-[#D47341] mt-1.5">•</span>
-                      <span>You must relentlessly fortify your base</span>
+                      <span>Relentlessly strengthen the base</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <span className="text-[#D47341] mt-1.5">•</span>
-                      <span>You must continuously listen to God's divine plan for you</span>
+                      <span>Follow god's plan, through the pain</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <span className="text-[#D47341] mt-1.5">•</span>
-                      <span>You must relentlessly find pain and push out of your comfort zone</span>
+                      <span>Relentlessly work on your craft, through the pain</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <span className="text-[#D47341] mt-1.5">•</span>
-                      <span>You must disregard anything that's not improving your gifts — they don't matter</span>
+                      <span>Forget about anything that's not the above</span>
                     </li>
                   </ul>
                 </div>
@@ -174,9 +174,9 @@ export default function Home() {
           </section>
 
           {/* Differentiation Section */}
-          <section className="section-gradient space-y-8 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
-            <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
-              Relentlessly extend your differentiation
+          <section className="section-gradient space-y-8 p-8 rounded-2xl bg-[#1c1c1e]/60 backdrop-blur-[2px]">
+            <h2 className="text-4xl font-bold tracking-tight text-white">
+              Relentlessly work on your craft
             </h2>
 
             {/* Differentiation SVG */}
@@ -187,7 +187,7 @@ export default function Home() {
                 style={{ 
                   strokeLinecap: 'round', 
                   strokeLinejoin: 'round',
-                  filter: 'drop-shadow(0 0 8px rgba(212, 115, 65, 0.3))'
+                  filter: 'drop-shadow(0 0 4px rgba(212, 115, 65, 0.2))'
                 }}
               >
                 {/* Central Growth Line */}
@@ -217,9 +217,9 @@ export default function Home() {
                 </g>
 
                 {/* Labels */}
-                <g className="fill-white text-sm">
+                <g className="fill-white font-medium">
                   <text x="125" y="50" className="text-[10px]">Fitness</text>
-                  <text x="180" y="30" className="text-[10px]">Learning</text>
+                  <text x="180" y="30" className="text-[10px]">Product Management</text>
                   <text x="245" y="50" className="text-[10px]">Empathy</text>
                 </g>
               </svg>
@@ -228,9 +228,9 @@ export default function Home() {
             <div className="space-y-12">
               {/* Fitness Section */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-medium text-[#D47341]">Fitness</h3>
-                <p className="text-lg text-gray-300">
-                  Fitness is the hidden superpower because it lets you do 10x more for 10x longer.
+                <h3 className="text-2xl font-semibold text-[#D47341]">Physique</h3>
+                <p className="text-lg text-gray-200">
+                  A body that is chiselled like iron.
                 </p>
                 <div className="mt-6 bg-black/30 p-6 rounded-xl">
                   <FitnessMetrics />
@@ -239,9 +239,9 @@ export default function Home() {
 
               {/* Learning Section */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-medium text-[#D47341]">Learning</h3>
-                <p className="text-lg text-gray-300">
-                  The best learner is the best earner.
+                <h3 className="text-2xl font-semibold text-[#D47341]">Product Management</h3>
+                <p className="text-lg text-gray-200">
+                  Build insanely great products.
                 </p>
                 <div className="mt-6 bg-black/30 p-6 rounded-xl">
                   <LearningMetrics />
@@ -250,9 +250,9 @@ export default function Home() {
 
               {/* Empathy Section */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-medium text-[#D47341]">Empathy</h3>
-                <p className="text-lg text-gray-300">
-                  Building an empathy is an absolute super power for making friends, money, and fullfillment.
+                <h3 className="text-2xl font-semibold text-[#D47341]">Connection</h3>
+                <p className="text-lg text-gray-200">
+                  Leave deep, loving impressions on everyone you encounter.
                 </p>
                 <div className="mt-6 bg-black/30 p-6 rounded-xl">
                   <EmpathyMetrics />
