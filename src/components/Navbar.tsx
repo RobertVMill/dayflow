@@ -15,6 +15,7 @@ export default function Navbar() {
     { href: '/wishlist', label: 'Wishlist' },
     { href: '/groceries', label: 'Groceries' },
     { href: '/meals', label: 'Meals' },
+    { href: '/workouts', label: 'Workouts' },
     { href: '/mantras', label: 'Mantras' },
     { href: '/reminders', label: 'Reminders' }
   ];
