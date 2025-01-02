@@ -22,6 +22,16 @@ export default function Navbar() {
               Dashboard
             </Link>
             <Link
+              href="/books"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                pathname === '/books'
+                  ? 'bg-vision-primary text-white shadow-lg'
+                  : 'text-gray-300 hover:bg-white/5 hover:text-white'
+              }`}
+            >
+              Books
+            </Link>
+            <Link
               href="/meals"
               className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                 pathname === '/meals'
@@ -30,6 +40,16 @@ export default function Navbar() {
               }`}
             >
               Meals
+            </Link>
+            <Link
+              href="/groceries"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                pathname === '/groceries'
+                  ? 'bg-vision-primary text-white shadow-lg'
+                  : 'text-gray-300 hover:bg-white/5 hover:text-white'
+              }`}
+            >
+              Groceries
             </Link>
             <Link
               href="/reminders"
