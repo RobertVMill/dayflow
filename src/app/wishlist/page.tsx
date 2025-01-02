@@ -8,7 +8,7 @@ export default function Wishlist() {
   const [newItem, setNewItem] = useState({
     title: '',
     price: '',
-    priority: 'medium' as const,
+    priority: 'medium' as 'low' | 'medium' | 'high',
     url: '',
     notes: ''
   });
@@ -107,7 +107,10 @@ export default function Wishlist() {
           />
           <select
             value={newItem.priority}
-            onChange={(e) => setNewItem(prev => ({ ...prev, priority: e.target.value as 'low' | 'medium' | 'high' }))}
+            onChange={(e) => setNewItem(prev => ({ 
+              ...prev, 
+              priority: e.target.value as 'low' | 'medium' | 'high' 
+            }))}
             className="p-2 rounded bg-black/30 text-white border border-[#D47341]/20"
           >
             <option value="low">Low Priority</option>
