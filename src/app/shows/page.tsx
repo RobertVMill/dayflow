@@ -13,7 +13,7 @@ export default function Shows() {
     notes: '',
     key_learnings: '',
     perspective_changes: '',
-    status: 'completed' as const
+    status: 'completed' as 'completed' | 'want_to_watch'
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
