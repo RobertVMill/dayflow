@@ -57,6 +57,15 @@ export default function BooksPage() {
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <main className="space-y-12">
+          {/* Motivational Reminder */}
+          <div className="p-6 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm border border-[#D47341]/20">
+            <p className="text-xl text-center font-medium text-white">
+              <span className="text-[#D47341]">Books are the greatest way to learn</span>
+              <br />
+              <span className="text-gray-300">Devour bookshelves</span>
+            </p>
+          </div>
+
           {/* Add Book Section */}
           <section className="space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
             <h1 className="text-4xl font-bold tracking-tight text-white">Add Book</h1>
