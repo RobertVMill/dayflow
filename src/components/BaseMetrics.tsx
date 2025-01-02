@@ -264,7 +264,7 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
 
   return (
     <div className="w-full p-2 sm:p-4 bg-black/30 rounded-lg">
-      <div className="h-[250px] sm:h-[300px] mb-4">
+      <div className="h-[180px] sm:h-[200px] mb-4">
         <Line data={chartData} options={defaultOptions} />
       </div>
       <form onSubmit={handleAddMetric} className="flex flex-col gap-2">
@@ -326,16 +326,31 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
             placeholder="Enter cash savings amount ($)"
             className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500"
           />
-        ) : metricType === 'meditation' ? (
-          <input
-            type="number"
-            step="1"
-            min="0"
-            value={newValue}
-            onChange={(e) => setNewValue(e.target.value)}
-            placeholder="Enter meditation minutes"
-            className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500"
-          />
+        ) : metricType === 'meditation' || metricType === 'walking' ? (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setNewValue('yes')}
+              className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
+                newValue === 'yes' 
+                  ? 'bg-green-600/20 text-green-400 border-green-600/40' 
+                  : 'bg-black/30 text-gray-400 hover:text-green-400'
+              } border`}
+            >
+              ✓
+            </button>
+            <button
+              type="button"
+              onClick={() => setNewValue('no')}
+              className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
+                newValue === 'no'
+                  ? 'bg-red-600/20 text-red-400 border-red-600/40'
+                  : 'bg-black/30 text-gray-400 hover:text-red-400'
+              } border`}
+            >
+              ✕
+            </button>
+          </div>
         ) : (
           <input
             type="number"
@@ -364,7 +379,7 @@ export default function BaseMetrics() {
     <div className="w-full grid gap-6 sm:gap-8 -mx-2 sm:mx-0">
       <div className="space-y-4 sm:space-y-6">
         <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Sleep Quality</h4>
-        <div className="space-y-4 sm:space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <BaseChart
             title="Sleep Score"
             metricType="sleep_score"
@@ -375,7 +390,7 @@ export default function BaseMetrics() {
 
       <div className="space-y-4 sm:space-y-6">
         <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Daily Goals</h4>
-        <div className="space-y-4 sm:space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <BaseChart
             title="30 Minutes of Sunlight"
             metricType="sunlight"
@@ -401,21 +416,23 @@ export default function BaseMetrics() {
             isReliability={true}
           />
           <BaseChart
-            title="Meditation Minutes"
+            title="Meditation"
             metricType="meditation"
-            yAxisLabel="min"
+            yAxisLabel=""
+            isBinary={true}
           />
           <BaseChart
-            title="Walking Minutes"
+            title="Long Walk"
             metricType="walking"
-            yAxisLabel="min"
+            yAxisLabel=""
+            isBinary={true}
           />
         </div>
       </div>
 
       <div className="space-y-4 sm:space-y-6">
         <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Financial Health</h4>
-        <div className="space-y-4 sm:space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <BaseChart
             title="Cash Savings"
             metricType="savings"
