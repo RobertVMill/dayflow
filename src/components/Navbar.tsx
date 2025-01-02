@@ -8,14 +8,15 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const links = [
-    { href: '/', label: 'Dashboard' },
+  const MENU_ITEMS = [
+    { href: '/', label: 'Home' },
     { href: '/books', label: 'Books' },
     { href: '/shows', label: 'Shows' },
-    { href: '/meals', label: 'Meals' },
-    { href: '/groceries', label: 'Groceries' },
     { href: '/wishlist', label: 'Wishlist' },
-    { href: '/reminders', label: 'Reminders' },
+    { href: '/groceries', label: 'Groceries' },
+    { href: '/meals', label: 'Meals' },
+    { href: '/mantras', label: 'Mantras' },
+    { href: '/reminders', label: 'Reminders' }
   ];
 
   return (
@@ -55,7 +56,7 @@ export default function Navbar() {
 
           {/* Desktop menu */}
           <div className="hidden md:flex md:items-center md:space-x-4">
-            {links.map((link) => (
+            {MENU_ITEMS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -74,7 +75,7 @@ export default function Navbar() {
         {/* Mobile menu */}
         <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
           <div className="px-2 pt-2 pb-3 space-y-1">
-            {links.map((link) => (
+            {MENU_ITEMS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
