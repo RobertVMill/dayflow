@@ -112,6 +112,29 @@ export default function Home() {
             </div>
           </section>
 
+          {/* 2025 Goals Section */}
+          <section className="section-gradient space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
+            <div className="space-y-4">
+              <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+                2025: The Barbell Year
+              </h2>
+              <ul className="space-y-4 text-lg">
+                <li className="flex items-start space-x-3">
+                  <span className="text-[#D47341] mt-1.5">•</span>
+                  <span>100 subscribers on your Web App</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-[#D47341] mt-1.5">•</span>
+                  <span>Get a job as a Product Manager at a tech company</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-[#D47341] mt-1.5">•</span>
+                  <span>Get a membership at the Mayfair Lakeshore</span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
           {/* Base Section */}
           <section className="section-gradient space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
             <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
