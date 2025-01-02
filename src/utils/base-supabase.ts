@@ -12,7 +12,18 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
-export type MetricType = 'sleep_score' | 'sunlight' | 'water' | 'plant_based' | 'reliability' | 'savings' | 'meditation' | 'walking' | 'github_commits';
+export type MetricType = 
+  | 'sleep_score'
+  | 'sunlight'
+  | 'plant_based'
+  | 'reliability'
+  | 'savings'
+  | 'meditation'
+  | 'walking'
+  | 'jazz_abstinence'
+  | 'yoga'
+  | 'clean_space'
+  | 'github_commits';
 
 export interface BaseMetric {
   id: string;
@@ -22,74 +33,16 @@ export interface BaseMetric {
   habits?: string[];
 }
 
-export async function addBaseMetric(
-  metric_type: MetricType,
-  value: number,
-  habits?: string[],
-  timestamp?: Date
-): Promise<void> {
-  // Validate value based on metric type
-  switch (metric_type) {
-    case 'sleep_score':
-      if (value < 0 || value > 100) {
-        throw new Error('Sleep score must be between 0 and 100');
-      }
-      break;
-    case 'sunlight':
-    case 'water':
-      if (value !== 0 && value !== 1) {
-        throw new Error('Sunlight and water metrics must be 0 or 1');
-      }
-      break;
-    case 'plant_based':
-      if (value < 0 || value > 100 || value % 20 !== 0) {
-        throw new Error('Plant-based score must be a multiple of 20 between 0 and 100');
-      }
-      if (!habits || habits.length === 0) {
-        throw new Error('Plant-based metrics require habits to be specified');
-      }
-      break;
-    case 'reliability':
-      if (value < 0 || value > 100 || value % 25 !== 0) {
-        throw new Error('Reliability score must be a multiple of 25 between 0 and 100');
-      }
-      if (!habits || habits.length === 0) {
-        throw new Error('Reliability metrics require habits to be specified');
-      }
-      break;
-    case 'savings':
-      if (value < 0) {
-        throw new Error('Savings amount cannot be negative');
-      }
-      break;
-    case 'meditation':
-    case 'walking':
-      if (value < 0) {
-        throw new Error('Minutes cannot be negative');
-      }
-      break;
-    case 'github_commits':
-      if (value < 0) {
-        throw new Error('Commits cannot be negative');
-      }
-      break;
-    default:
-      throw new Error('Invalid metric type');
-  }
-
-  const { error } = await supabase
+export async function addBaseMetric(metric_type: MetricType, value: number, habits?: string[]) {
+  const { data, error } = await supabase
     .from('base_metrics')
-    .insert([{ 
-      metric_type, 
-      value, 
-      habits,
-      created_at: timestamp ? timestamp.toISOString() : undefined 
-    }]);
+    .insert([{ metric_type, value, habits }]);
 
   if (error) throw error;
+  return data;
 }
 
-export async function getBaseMetrics(metric_type: MetricType): Promise<BaseMetric[]> {
+export async function getBaseMetrics(metric_type: MetricType) {
   const { data, error } = await supabase
     .from('base_metrics')
     .select('*')
@@ -98,4 +51,33 @@ export async function getBaseMetrics(metric_type: MetricType): Promise<BaseMetri
 
   if (error) throw error;
   return data as BaseMetric[];
+}
+
+export function getMetricLabel(metric_type: MetricType): string {
+  switch (metric_type) {
+    case 'sleep_score':
+      return 'Sleep Score';
+    case 'sunlight':
+      return 'Sunlight';
+    case 'plant_based':
+      return 'Plant-Based';
+    case 'reliability':
+      return 'Reliability';
+    case 'savings':
+      return 'Savings';
+    case 'meditation':
+      return 'Meditation';
+    case 'walking':
+      return 'Walking';
+    case 'jazz_abstinence':
+      return 'Jazz Abstinence';
+    case 'yoga':
+      return 'Yoga';
+    case 'clean_space':
+      return 'Clean Space';
+    case 'github_commits':
+      return 'GitHub Commits';
+    default:
+      return metric_type;
+  }
 } 

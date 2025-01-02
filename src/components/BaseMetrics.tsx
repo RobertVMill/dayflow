@@ -11,7 +11,7 @@ import {
   Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { BaseMetric, addBaseMetric, getBaseMetrics } from '../utils/base-supabase';
+import { BaseMetric, addBaseMetric, getBaseMetrics, MetricType } from '../utils/base-supabase';
 import { fetchGithubCommits } from '../utils/github';
 
 ChartJS.register(
@@ -27,7 +27,7 @@ ChartJS.register(
 
 interface BaseChartProps {
   title: string;
-  metricType: BaseMetric['metric_type'];
+  metricType: MetricType;
   yAxisLabel: string;
   isBinary?: boolean;
   isPlantBased?: boolean;
@@ -35,12 +35,23 @@ interface BaseChartProps {
   options?: any;
 }
 
+type BaseChartPropsWithValue = BaseChartProps & {
+  onValueChange?: (value: string) => void;
+  value?: string;
+  selectedHabits?: string[];
+  onHabitsChange?: (habits: string[]) => void;
+  showSuccess?: boolean;
+  isSubmitting?: boolean;
+};
+
 const PLANT_BASED_HABITS = [
   'Fast til noon',
   'No dairy',
   'No sugar',
   'No gluten',
-  'Plant-Based'
+  'Plant-Based',
+  '6L of Water',
+  'Fish Not Meat'
 ];
 
 const RELIABILITY_HABITS = [
@@ -50,13 +61,24 @@ const RELIABILITY_HABITS = [
   'Over-deliver on your promises'
 ];
 
-function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBased = false, isReliability = false, options: chartOptions }: BaseChartProps) {
+function BaseChart({ 
+  title, 
+  metricType, 
+  yAxisLabel, 
+  isBinary = false, 
+  isPlantBased = false, 
+  isReliability = false, 
+  options: chartOptions,
+  onValueChange,
+  value = '',
+  selectedHabits = [],
+  onHabitsChange
+}: BaseChartPropsWithValue) {
   const [metrics, setMetrics] = useState<BaseMetric[]>([]);
   const [githubMetrics, setGithubMetrics] = useState<{date: string, value: number}[]>([]);
-  const [newValue, setNewValue] = useState('');
-  const [selectedHabits, setSelectedHabits] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [streak, setStreak] = useState(0);
 
   useEffect(() => {
     if (metricType === 'github_commits') {
@@ -65,6 +87,46 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
       loadMetrics();
     }
   }, [metricType]);
+
+  useEffect(() => {
+    if ((metricType === 'jazz_abstinence' || metricType === 'yoga') && metrics.length > 0) {
+      calculateStreak();
+    }
+  }, [metrics, metricType]);
+
+  function calculateStreak() {
+    let currentStreak = 0;
+    const sortedMetrics = [...metrics].sort((a, b) => 
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+
+    // Check if we have a metric for today
+    const today = new Date().setHours(0, 0, 0, 0);
+    const lastMetricDate = new Date(sortedMetrics[0]?.created_at).setHours(0, 0, 0, 0);
+    
+    if (today !== lastMetricDate) {
+      setStreak(0);
+      return;
+    }
+
+    for (let i = 0; i < sortedMetrics.length; i++) {
+      const metric = sortedMetrics[i];
+      if (metricType === 'jazz_abstinence') {
+        if (metric.value === 0) { // 0 means abstained from jazz
+          currentStreak++;
+        } else {
+          break;
+        }
+      } else if (metricType === 'yoga') {
+        if (metric.value === 1) { // 1 means did yoga
+          currentStreak++;
+        } else {
+          break;
+        }
+      }
+    }
+    setStreak(currentStreak);
+  }
 
   async function loadGithubMetrics() {
     try {
@@ -93,39 +155,14 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
     }
   }
 
-  async function handleAddMetric(e: React.FormEvent) {
-    e.preventDefault();
-    if ((isPlantBased || isReliability) && selectedHabits.length === 0) return;
-    if (!isPlantBased && !isReliability && !newValue) return;
-
-    try {
-      if (isPlantBased) {
-        const value = selectedHabits.length * 20; // Each habit is worth 20%
-        await addBaseMetric(metricType, value, selectedHabits);
-        setSelectedHabits([]);
-      } else if (isReliability) {
-        const value = selectedHabits.length * 25; // Each habit is worth 25%
-        await addBaseMetric(metricType, value, selectedHabits);
-        setSelectedHabits([]);
-      } else {
-        const value = isBinary ? (newValue === 'yes' ? 1 : 0) : parseFloat(newValue);
-        await addBaseMetric(metricType, value);
-        setNewValue('');
-      }
-      loadMetrics();
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add metric');
-      console.error(err);
-    }
-  }
-
   function handleHabitToggle(habit: string) {
-    setSelectedHabits(prev => 
-      prev.includes(habit)
-        ? prev.filter(h => h !== habit)
-        : [...prev, habit]
-    );
+    if (onHabitsChange) {
+      onHabitsChange(
+        selectedHabits.includes(habit)
+          ? selectedHabits.filter(h => h !== habit)
+          : [...selectedHabits, habit]
+      );
+    }
   }
 
   const chartData = {
@@ -264,10 +301,24 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
 
   return (
     <div className="w-full p-2 sm:p-4 bg-black/30 rounded-lg">
-      <div className="h-[180px] sm:h-[200px] mb-4">
-        <Line data={chartData} options={defaultOptions} />
-      </div>
-      <form onSubmit={handleAddMetric} className="flex flex-col gap-2">
+      {metricType !== 'jazz_abstinence' && metricType !== 'yoga' && (
+        <div className="h-[180px] sm:h-[200px] mb-4">
+          <Line data={chartData} options={defaultOptions} />
+        </div>
+      )}
+      {metricType === 'jazz_abstinence' && (
+        <div className="py-8 text-center">
+          <div className="text-4xl font-bold text-[#D47341]">{streak} Days</div>
+          <div className="text-gray-400 mt-2">Without Jazz</div>
+        </div>
+      )}
+      {metricType === 'yoga' && (
+        <div className="py-8 text-center">
+          <div className="text-4xl font-bold text-[#D47341]">{streak} Days</div>
+          <div className="text-gray-400 mt-2">Yoga Streak</div>
+        </div>
+      )}
+      <div className="flex flex-col gap-2">
         {isPlantBased || isReliability ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -284,16 +335,68 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
               ))}
             </div>
             <div className="text-right text-sm text-gray-400">
-              Score: {selectedHabits.length * (isPlantBased ? 20 : 25)}%
+              Score: {isPlantBased 
+                ? Math.min(100, Math.round(selectedHabits.length * (100 / 7)))
+                : selectedHabits.length * 25}%
             </div>
           </>
+        ) : metricType === 'jazz_abstinence' ? (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => onValueChange?.('no')}
+              className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
+                value === 'no' 
+                  ? 'bg-green-600/20 text-green-400 border-green-600/40' 
+                  : 'bg-black/30 text-gray-400 hover:text-green-400'
+              } border`}
+            >
+              No Jazz Today
+            </button>
+            <button
+              type="button"
+              onClick={() => onValueChange?.('yes')}
+              className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
+                value === 'yes'
+                  ? 'bg-red-600/20 text-red-400 border-red-600/40'
+                  : 'bg-black/30 text-gray-400 hover:text-red-400'
+              } border`}
+            >
+              Reset Streak
+            </button>
+          </div>
+        ) : metricType === 'yoga' ? (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => onValueChange?.('yes')}
+              className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
+                value === 'yes' 
+                  ? 'bg-green-600/20 text-green-400 border-green-600/40' 
+                  : 'bg-black/30 text-gray-400 hover:text-green-400'
+              } border`}
+            >
+              Did Yoga Today
+            </button>
+            <button
+              type="button"
+              onClick={() => onValueChange?.('no')}
+              className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
+                value === 'no'
+                  ? 'bg-red-600/20 text-red-400 border-red-600/40'
+                  : 'bg-black/30 text-gray-400 hover:text-red-400'
+              } border`}
+            >
+              Break Streak
+            </button>
+          </div>
         ) : isBinary ? (
           <div className="flex gap-2">
             <button
               type="button"
-              onClick={() => setNewValue('yes')}
+              onClick={() => onValueChange?.('yes')}
               className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
-                newValue === 'yes' 
+                value === 'yes' 
                   ? 'bg-green-600/20 text-green-400 border-green-600/40' 
                   : 'bg-black/30 text-gray-400 hover:text-green-400'
               } border`}
@@ -302,9 +405,9 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
             </button>
             <button
               type="button"
-              onClick={() => setNewValue('no')}
+              onClick={() => onValueChange?.('no')}
               className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
-                newValue === 'no'
+                value === 'no'
                   ? 'bg-red-600/20 text-red-400 border-red-600/40'
                   : 'bg-black/30 text-gray-400 hover:text-red-400'
               } border`}
@@ -321,62 +424,80 @@ function BaseChart({ title, metricType, yAxisLabel, isBinary = false, isPlantBas
             type="number"
             step="1"
             min="0"
-            value={newValue}
-            onChange={(e) => setNewValue(e.target.value)}
+            value={value}
+            onChange={(e) => onValueChange?.(e.target.value)}
             placeholder="Enter cash savings amount ($)"
             className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500"
           />
-        ) : metricType === 'meditation' || metricType === 'walking' ? (
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => setNewValue('yes')}
-              className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
-                newValue === 'yes' 
-                  ? 'bg-green-600/20 text-green-400 border-green-600/40' 
-                  : 'bg-black/30 text-gray-400 hover:text-green-400'
-              } border`}
-            >
-              ✓
-            </button>
-            <button
-              type="button"
-              onClick={() => setNewValue('no')}
-              className={`flex-1 p-2 rounded text-sm sm:text-base transition-colors ${
-                newValue === 'no'
-                  ? 'bg-red-600/20 text-red-400 border-red-600/40'
-                  : 'bg-black/30 text-gray-400 hover:text-red-400'
-              } border`}
-            >
-              ✕
-            </button>
-          </div>
         ) : (
           <input
             type="number"
             step="1"
             min="0"
             max="100"
-            value={newValue}
-            onChange={(e) => setNewValue(e.target.value)}
+            value={value}
+            onChange={(e) => onValueChange?.(e.target.value)}
             placeholder={`Enter ${title.toLowerCase()} (0-100%)`}
             className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500"
           />
         )}
-        <button
-          type="submit"
-          className="w-full px-3 sm:px-4 py-2 text-sm sm:text-base bg-[#D47341] text-white rounded hover:bg-[#B85C2C] transition-colors"
-        >
-          Add
-        </button>
-      </form>
+      </div>
     </div>
   );
 }
 
 export default function BaseMetrics() {
+  const [values, setValues] = useState<Record<string, string>>({});
+  const [habits, setHabits] = useState<Record<string, string[]>>({
+    plant_based: [],
+    reliability: []
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+    setShowSuccess(false);
+
+    try {
+      // Submit all metrics
+      await Promise.all(Object.entries(values).map(async ([metricType, value]) => {
+        if (!value) return;
+
+        if (metricType === 'plant_based') {
+          const itemValue = 100 / 7; // 14.29% per item
+          const numericValue = Math.min(100, Math.round(habits.plant_based.length * itemValue));
+          await addBaseMetric(metricType as MetricType, numericValue, habits.plant_based);
+        } else if (metricType === 'reliability') {
+          const numericValue = habits.reliability.length * 25;
+          await addBaseMetric(metricType as MetricType, numericValue, habits.reliability);
+        } else {
+          const numericValue = value === 'yes' ? 1 : value === 'no' ? 0 : parseFloat(value);
+          await addBaseMetric(metricType as MetricType, numericValue);
+        }
+      }));
+
+      // Show success message
+      setShowSuccess(true);
+      // Hide success message after 3 seconds
+      setTimeout(() => setShowSuccess(false), 3000);
+
+      // Reset form
+      setValues({});
+      setHabits({ plant_based: [], reliability: [] });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to submit metrics');
+      console.error(err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
-    <div className="w-full grid gap-6 sm:gap-8 -mx-2 sm:mx-0">
+    <form onSubmit={handleSubmit} className="w-full grid gap-6 sm:gap-8 -mx-2 sm:mx-0">
       <div className="space-y-4 sm:space-y-6">
         <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Sleep Quality</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
@@ -384,6 +505,8 @@ export default function BaseMetrics() {
             title="Sleep Score"
             metricType="sleep_score"
             yAxisLabel="%"
+            value={values.sleep_score || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, sleep_score: value }))}
           />
         </div>
       </div>
@@ -392,40 +515,68 @@ export default function BaseMetrics() {
         <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Daily Goals</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <BaseChart
+            title="Clean and Organized Space"
+            metricType="clean_space"
+            yAxisLabel=""
+            isBinary={true}
+            value={values.clean_space || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, clean_space: value }))}
+          />
+          <BaseChart
             title="30 Minutes of Sunlight"
             metricType="sunlight"
             yAxisLabel=""
             isBinary={true}
+            value={values.sunlight || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, sunlight: value }))}
           />
           <BaseChart
-            title="6L of Water"
-            metricType="water"
-            yAxisLabel=""
-            isBinary={true}
-          />
-          <BaseChart
-            title="Plant-Based Habits"
+            title="Microbiome Checklist"
             metricType="plant_based"
             yAxisLabel="%"
             isPlantBased={true}
+            selectedHabits={habits.plant_based}
+            onHabitsChange={(newHabits) => setHabits(prev => ({ ...prev, plant_based: newHabits }))}
           />
           <BaseChart
             title="Never Letting People Down"
             metricType="reliability"
             yAxisLabel="%"
             isReliability={true}
+            selectedHabits={habits.reliability}
+            onHabitsChange={(newHabits) => setHabits(prev => ({ ...prev, reliability: newHabits }))}
           />
           <BaseChart
             title="Meditation"
             metricType="meditation"
             yAxisLabel=""
             isBinary={true}
+            value={values.meditation || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, meditation: value }))}
           />
           <BaseChart
             title="Long Walk"
             metricType="walking"
             yAxisLabel=""
             isBinary={true}
+            value={values.walking || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, walking: value }))}
+          />
+          <BaseChart
+            title="Jazz Abstinence"
+            metricType="jazz_abstinence"
+            yAxisLabel="Days"
+            isBinary={true}
+            value={values.jazz_abstinence || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, jazz_abstinence: value }))}
+          />
+          <BaseChart
+            title="Yoga Practice"
+            metricType="yoga"
+            yAxisLabel="Days"
+            isBinary={true}
+            value={values.yoga || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, yoga: value }))}
           />
         </div>
       </div>
@@ -437,9 +588,32 @@ export default function BaseMetrics() {
             title="Cash Savings"
             metricType="savings"
             yAxisLabel="$"
+            value={values.savings || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, savings: value }))}
           />
         </div>
       </div>
-    </div>
+
+      {error && (
+        <div className="text-red-500 bg-red-500/10 p-4 rounded-lg">
+          {error}
+        </div>
+      )}
+
+      <div className="fixed bottom-0 left-0 right-0 bg-black/95 p-4">
+        {showSuccess && (
+          <div className="mb-4 bg-green-600/90 text-white px-4 py-3 rounded-lg text-center shadow-lg transition-all duration-300 ease-in-out">
+            ✓ Metrics submitted successfully!
+          </div>
+        )}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full px-6 py-3 text-lg bg-[#D47341] text-white rounded hover:bg-[#B85C2C] transition-colors disabled:opacity-50"
+        >
+          {isSubmitting ? 'Submitting...' : 'Submit All Metrics'}
+        </button>
+      </div>
+    </form>
   );
 } 
