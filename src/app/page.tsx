@@ -56,7 +56,7 @@ export default function Home() {
         <main className="space-y-16">
           {/* Vision Section */}
           <section className="section-gradient space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
-            <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent animate-vision">Vision</h1>
+            <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent animate-vision">Purpose</h1>
             
             <div className="space-y-12 py-8">
               {/* First Statement */}
@@ -73,7 +73,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-semibold text-white mb-2">You have been endowed with special gifts that only you can bring to this world</h3>
+                  <h3 className="text-2xl font-semibold text-white mb-2">Success is a life full of <span className="text-pink-400">LOVE</span>, <span className="text-yellow-400">ENERGY</span>, <span className="text-emerald-400">ENTHUSIASM</span>, and <span className="text-[#D47341]">EXCITEMENT</span>. You achieve these by fully expressing your gifts to the world and keeping your heart open to possibility.</h3>
                 </div>
               </div>
 
@@ -88,19 +88,23 @@ export default function Home() {
                   </svg>
                 </div>
                 <div className="flex-1 space-y-4">
-                  <h3 className="text-2xl font-semibold text-white">Listen to god's divine plan for you</h3>
-                  <ul className="space-y-2 text-xl text-gray-300">
-                    <li className="flex items-center space-x-2">
-                      <span className="text-[#D47341]">•</span>
-                      <span>Relentlessly build your base</span>
+                  <h3 className="text-2xl font-semibold text-white">To fully express your gifts to the world:</h3>
+                  <ul className="space-y-4 text-xl text-gray-300">
+                    <li className="flex items-start space-x-3">
+                      <span className="text-[#D47341] mt-1.5">•</span>
+                      <span>You must relentlessly fortify your base</span>
                     </li>
-                    <li className="flex items-center space-x-2">
-                      <span className="text-[#D47341]">•</span>
-                      <span>Relentlessly express your gifts</span>
+                    <li className="flex items-start space-x-3">
+                      <span className="text-[#D47341] mt-1.5">•</span>
+                      <span>You must continuously listen to God's divine plan for you</span>
                     </li>
-                    <li className="flex items-center space-x-2">
-                      <span className="text-[#D47341]">•</span>
-                      <span>If it's not improving your craft, it doesn't matter</span>
+                    <li className="flex items-start space-x-3">
+                      <span className="text-[#D47341] mt-1.5">•</span>
+                      <span>You must relentlessly find pain and push out of your comfort zone</span>
+                    </li>
+                    <li className="flex items-start space-x-3">
+                      <span className="text-[#D47341] mt-1.5">•</span>
+                      <span>You must disregard anything that's not improving your gifts — they don't matter</span>
                     </li>
                   </ul>
                 </div>
