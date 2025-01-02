@@ -58,67 +58,54 @@ export default function Home() {
           <section className="section-gradient space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
             <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent animate-vision">Vision</h1>
             
-            {/* Vision SVG */}
-            <div className="w-full max-w-3xl mx-auto py-12 animate-vision" style={{ animationDelay: '0.2s' }}>
-              <svg
-                viewBox="0 0 400 200"
-                className="w-full h-auto stroke-[#D47341] fill-none stroke-[3]"
-                style={{ 
-                  strokeLinecap: 'round', 
-                  strokeLinejoin: 'round',
-                  filter: 'drop-shadow(0 0 8px rgba(212, 115, 65, 0.3))'
-                }}
-              >
-                {/* Divine Light Rays */}
-                <g className="stroke-[#D47341]/50">
-                  <path d="M 200 40 L 200 10" />
-                  <path d="M 180 45 L 170 15" />
-                  <path d="M 220 45 L 230 15" />
-                  <path d="M 160 55 L 140 30" />
-                  <path d="M 240 55 L 260 30" />
-                </g>
+            <div className="space-y-12 py-8">
+              {/* First Statement */}
+              <div className="flex items-start space-x-6 animate-vision" style={{ animationDelay: '0.2s' }}>
+                <div className="w-16 h-16 flex-shrink-0">
+                  <svg viewBox="0 0 64 64" className="w-full h-full stroke-[#D47341] fill-none stroke-[2]">
+                    <circle cx="32" cy="32" r="20" className="fill-[#D47341]/20" />
+                    <g className="stroke-[#D47341]/50">
+                      <path d="M 32 12 L 32 4" />
+                      <path d="M 32 60 L 32 52" />
+                      <path d="M 12 32 L 4 32" />
+                      <path d="M 60 32 L 52 32" />
+                    </g>
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-semibold text-white mb-2">You have been endowed with special gifts that only you can bring to this world</h3>
+                </div>
+              </div>
 
-                {/* Central Circle (Divine Guidance) */}
-                <circle 
-                  cx="200" 
-                  cy="80" 
-                  r="30" 
-                  className="fill-[#D47341]/20 stroke-[#D47341]" 
-                />
-
-                {/* Person Silhouette */}
-                <path 
-                  d="M 185 140 C 185 120, 215 120, 215 140" 
-                  className="stroke-[#D47341]" 
-                />
-                <circle 
-                  cx="200" 
-                  cy="110" 
-                  r="10" 
-                  className="fill-[#D47341]/20 stroke-[#D47341]" 
-                />
-
-                {/* Growth Path */}
-                <path 
-                  d="M 200 150 C 200 180, 140 170, 120 150" 
-                  className="stroke-[#D47341]" 
-                />
-                <path 
-                  d="M 200 150 C 200 180, 260 170, 280 150" 
-                  className="stroke-[#D47341]" 
-                />
-
-                {/* Decorative Elements */}
-                <path 
-                  d="M 100 180 C 100 100, 300 100, 300 180" 
-                  className="stroke-[#D47341]/40" 
-                />
-              </svg>
+              {/* Second Statement */}
+              <div className="flex items-start space-x-6 animate-vision" style={{ animationDelay: '0.3s' }}>
+                <div className="w-16 h-16 flex-shrink-0">
+                  <svg viewBox="0 0 64 64" className="w-full h-full stroke-[#D47341] fill-none stroke-[2]">
+                    <path d="M 32 8 L 32 56" className="stroke-[#D47341]" />
+                    <path d="M 16 24 L 32 8 L 48 24" className="stroke-[#D47341]" />
+                    <path d="M 24 40 L 32 32 L 40 40" className="stroke-[#D47341]/50" />
+                    <path d="M 28 52 L 32 48 L 36 52" className="stroke-[#D47341]/30" />
+                  </svg>
+                </div>
+                <div className="flex-1 space-y-4">
+                  <h3 className="text-2xl font-semibold text-white">Listen to god's divine plan for you</h3>
+                  <ul className="space-y-2 text-xl text-gray-300">
+                    <li className="flex items-center space-x-2">
+                      <span className="text-[#D47341]">•</span>
+                      <span>Relentlessly build your base</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <span className="text-[#D47341]">•</span>
+                      <span>Relentlessly express your gifts</span>
+                    </li>
+                    <li className="flex items-center space-x-2">
+                      <span className="text-[#D47341]">•</span>
+                      <span>If it's not improving your craft, it doesn't matter</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
-
-            <p className="text-xl text-gray-300 leading-relaxed max-w-3xl animate-vision" style={{ animationDelay: '0.4s' }}>
-              You&apos;ve got something special, Bert. Listen to god&apos;s plan for you. Relentlessly build your base, then relentlessly express your gifts.
-            </p>
           </section>
 
           {/* Base Section */}
