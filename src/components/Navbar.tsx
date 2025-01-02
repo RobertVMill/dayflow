@@ -11,6 +11,7 @@ export default function Navbar() {
   const links = [
     { href: '/', label: 'Dashboard' },
     { href: '/books', label: 'Books' },
+    { href: '/shows', label: 'Shows' },
     { href: '/meals', label: 'Meals' },
     { href: '/groceries', label: 'Groceries' },
     { href: '/wishlist', label: 'Wishlist' },
