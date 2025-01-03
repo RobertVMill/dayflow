@@ -118,25 +118,59 @@ export default function Home() {
               <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
                 2025: The Barbell Year
               </h2>
-              <ul className="space-y-4 text-lg">
-                <li className="flex items-start space-x-3">
-                  <span className="text-[#D47341] mt-1.5">•</span>
+              <ul className="space-y-6 text-lg">
+                <li className="flex items-start space-x-4">
+                  <div className="w-8 h-8 flex-shrink-0 mt-1">
+                    <svg viewBox="0 0 24 24" className="w-full h-full stroke-[#D47341] fill-none stroke-[1.5]">
+                      <circle cx="12" cy="8" r="5" />
+                      <path d="M20 21C20 16.5817 16.4183 13 12 13C7.58172 13 4 16.5817 4 21" />
+                      <path d="M12 13L12 21" strokeDasharray="2 2" />
+                      <path d="M9 18L15 18" strokeDasharray="2 2" />
+                    </svg>
+                  </div>
                   <span>100 subscribers on your Web App</span>
                 </li>
-                <li className="flex items-start space-x-3">
-                  <span className="text-[#D47341] mt-1.5">•</span>
+                <li className="flex items-start space-x-4">
+                  <div className="w-8 h-8 flex-shrink-0 mt-1">
+                    <svg viewBox="0 0 24 24" className="w-full h-full stroke-[#D47341] fill-none stroke-[1.5]">
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <path d="M8 12L11 15L16 9" />
+                      <path d="M3 8H21" />
+                      <circle cx="8" cy="5.5" r="1" className="fill-[#D47341]" />
+                    </svg>
+                  </div>
                   <span>Get a job as a Product Manager at a tech company</span>
                 </li>
-                <li className="flex items-start space-x-3">
-                  <span className="text-[#D47341] mt-1.5">•</span>
+                <li className="flex items-start space-x-4">
+                  <div className="w-8 h-8 flex-shrink-0 mt-1">
+                    <svg viewBox="0 0 24 24" className="w-full h-full stroke-[#D47341] fill-none stroke-[1.5]">
+                      <path d="M4 10C4 6.13401 7.13401 3 11 3C14.866 3 18 6.13401 18 10V14H4V10Z" />
+                      <path d="M2 14H20V21H2V14Z" />
+                      <circle cx="11" cy="17.5" r="1.5" className="fill-[#D47341]" />
+                    </svg>
+                  </div>
                   <span>Get a membership at the Mayfair Lakeshore</span>
                 </li>
-                <li className="flex items-start space-x-3">
-                  <span className="text-[#D47341] mt-1.5">•</span>
+                <li className="flex items-start space-x-4">
+                  <div className="w-8 h-8 flex-shrink-0 mt-1">
+                    <svg viewBox="0 0 24 24" className="w-full h-full stroke-[#D47341] fill-none stroke-[1.5]">
+                      <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" />
+                      <path d="M12 6V12L15 15" />
+                      <path d="M7 8L17 16" strokeDasharray="2 2" />
+                    </svg>
+                  </div>
                   <span>Take my average recovery score from 60 to 80</span>
                 </li>
-                <li className="flex items-start space-x-3">
-                  <span className="text-[#D47341] mt-1.5">•</span>
+                <li className="flex items-start space-x-4">
+                  <div className="w-8 h-8 flex-shrink-0 mt-1">
+                    <svg viewBox="0 0 24 24" className="w-full h-full stroke-[#D47341] fill-none stroke-[1.5]">
+                      <path d="M6.5 4C4.567 4 3 5.567 3 7.5C3 9.433 4.567 11 6.5 11C8.433 11 10 9.433 10 7.5" />
+                      <path d="M17.5 4C19.433 4 21 5.567 21 7.5C21 9.433 19.433 11 17.5 11C15.567 11 14 9.433 14 7.5" />
+                      <path d="M12 5V19" />
+                      <path d="M8 14L12 10L16 14" />
+                      <path d="M8 19L12 15L16 19" />
+                    </svg>
+                  </div>
                   <span>Be more ripped than ever before (bottom abs showing)</span>
                 </li>
               </ul>
