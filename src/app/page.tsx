@@ -13,6 +13,17 @@ export default function Home() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [timelineScale, setTimelineScale] = useState(1);
+
+  // Calculate current position and week segment
+  const startDate = new Date('2024-01-01T00:00:00-05:00'); // Eastern Time
+  const currentDate = new Date('2024-01-03T00:00:00-05:00'); // Eastern Time, January 3rd
+  const daysSinceStart = Math.floor((currentDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+  const currentWeek = Math.floor(daysSinceStart / 7) + 1;
+  const baseSpacing = 30;
+  const currentDayPosition = 50 + (daysSinceStart * (baseSpacing / 7));
+  const weekStartX = 50 + ((currentWeek - 1) * baseSpacing);
+  const weekEndX = 50 + (currentWeek * baseSpacing);
 
   useEffect(() => {
     try {
@@ -177,6 +188,370 @@ export default function Home() {
             </div>
           </section>
 
+          {/* 7-Month Plan Section */}
+          <section className="section-gradient space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
+            <div className="space-y-4">
+              <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+                Jan 1 - Aug 1: The Journey
+              </h2>
+              
+              {/* Timeline Visualization */}
+              <div className="w-full overflow-x-auto overflow-y-hidden touch-pan-x">
+                <div 
+                  className="min-w-[1000px] py-8 px-4"
+                  style={{
+                    width: `${1000 * timelineScale}px`,
+                    overscrollBehaviorX: 'contain'
+                  }}
+                >
+                  <div 
+                    className="timeline-container relative"
+                    style={{ 
+                      touchAction: 'pan-x pinch-zoom'
+                    }}
+                    data-scale={timelineScale}
+                  >
+                    <svg
+                      viewBox="0 0 1000 200"
+                      className="w-full h-[200px]"
+                      preserveAspectRatio="xMidYMid meet"
+                    >
+                      {/* Current Week Highlight */}
+                      <rect
+                        x={weekStartX}
+                        y="70"
+                        width={baseSpacing}
+                        height="60"
+                        className="fill-[#D47341]/10"
+                      />
+
+                      {/* Main Timeline Line */}
+                      <path d="M 50 100 L 950 100" className="stroke-white/20" />
+                      
+                      {/* 28-Week Cycle Markers */}
+                      {Array.from({ length: 31 }).map((_, i) => {
+                        const baseSpacing = 30; // Increased base spacing
+                        const spacing = baseSpacing * timelineScale;
+                        const x = 50 + i * spacing;
+                        const isLastMarker = i === 30;
+                        
+                        return (
+                          <g key={i}>
+                            {!isLastMarker && (
+                              <path 
+                                d={`M ${x} 90 L ${x} 110`} 
+                                className="stroke-[#D47341]/30"
+                              />
+                            )}
+                            <g className={i % 4 === 0 || isLastMarker ? 'default-visible' : 'zoom-visible'}>
+                              {!isLastMarker ? (
+                                <>
+                                  <path 
+                                    d={`M ${x} 80 L ${x} 120`} 
+                                    className={`stroke-[#D47341] ${i % 4 === 0 ? '' : 'opacity-50'}`}
+                                  />
+                                  {i % 4 === 0 && (
+                                    <text
+                                      x={x}
+                                      y="140"
+                                      textAnchor="middle"
+                                      style={{ 
+                                        fill: 'white',
+                                        fontSize: '12px',
+                                        fontFamily: 'inherit'
+                                      }}
+                                    >
+                                      Week {i + 1}
+                                    </text>
+                                  )}
+                                </>
+                              ) : (
+                                <>
+                                  {/* End Journey Marker */}
+                                  <path 
+                                    d={`M ${x} 70 L ${x} 130`} 
+                                    className="stroke-[#D47341]"
+                                    strokeWidth="2"
+                                  />
+                                  <circle 
+                                    cx={x} 
+                                    cy="100" 
+                                    r="4" 
+                                    className="fill-[#D47341]"
+                                  />
+                                  <text
+                                    x={x}
+                                    y="150"
+                                    textAnchor="middle"
+                                    style={{ 
+                                      fill: '#D47341',
+                                      fontSize: '12px',
+                                      fontFamily: 'inherit',
+                                      fontWeight: 'bold'
+                                    }}
+                                  >
+                                    Aug 1
+                                  </text>
+                                </>
+                              )}
+                            </g>
+                          </g>
+                        );
+                      })}
+
+                      {/* Month Labels */}
+                      {['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'].map((month, i) => {
+                        const baseSpacing = 125;
+                        const spacing = baseSpacing * timelineScale;
+                        const x = 50 + i * spacing;
+                        
+                        return (
+                          <text
+                            key={month}
+                            x={x}
+                            y="60"
+                            textAnchor="middle"
+                            style={{ 
+                              fill: '#D47341',
+                              fontSize: '12px',
+                              fontFamily: 'inherit'
+                            }}
+                          >
+                            {month}
+                          </text>
+                        );
+                      })}
+
+                      {/* Current Day Marker */}
+                      <g>
+                        <line 
+                          x1={currentDayPosition}
+                          y1="60"
+                          x2={currentDayPosition}
+                          y2="140"
+                          className="stroke-[#D47341]"
+                          strokeWidth="2"
+                        />
+                        <circle 
+                          cx={currentDayPosition}
+                          cy="100" 
+                          r="4" 
+                          className="fill-[#D47341]" 
+                        />
+                        <text
+                          x={currentDayPosition}
+                          y="25"
+                          textAnchor="middle"
+                          className="text-sm font-medium"
+                          style={{ 
+                            fill: 'white',
+                            fontSize: '12px',
+                            fontFamily: 'inherit'
+                          }}
+                        >
+                          Current Day
+                        </text>
+                        <text
+                          x={currentDayPosition}
+                          y="40"
+                          textAnchor="middle"
+                          className="text-sm font-medium"
+                          style={{ 
+                            fill: '#D47341',
+                            fontSize: '12px',
+                            fontFamily: 'inherit'
+                          }}
+                        >
+                          {currentDate.toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric'
+                          })}
+                        </text>
+                      </g>
+
+                      {/* Remove redundant Current Date text element */}
+                    </svg>
+
+                    <style jsx>{`
+                      .zoom-visible {
+                        opacity: 0;
+                        transition: opacity 0.2s ease-in-out;
+                      }
+                      .timeline-container[data-scale="${timelineScale}"] .zoom-visible {
+                        opacity: ${timelineScale >= 1.6 ? 1 : 0};
+                      }
+                    `}</style>
+                  </div>
+                </div>
+              </div>
+
+              {/* Add zoom controls */}
+              <div className="flex justify-center gap-4 mt-4">
+                <button 
+                  className="px-4 py-2 bg-[#D47341]/20 hover:bg-[#D47341]/30 text-white rounded-lg transition-colors"
+                  onClick={() => {
+                    setTimelineScale(scale => Math.min(scale + 0.2, 2));
+                  }}
+                >
+                  Zoom In
+                </button>
+                <button 
+                  className="px-4 py-2 bg-[#D47341]/20 hover:bg-[#D47341]/30 text-white rounded-lg transition-colors"
+                  onClick={() => {
+                    setTimelineScale(scale => Math.max(scale - 0.2, 0.5));
+                  }}
+                >
+                  Zoom Out
+                </button>
+              </div>
+
+              {/* Weekly Cycle Section */}
+              <div className="mt-8 p-6 bg-black/30 rounded-xl">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-2xl font-semibold text-[#D47341]">Weekly Cycle</h3>
+                  <span className="text-[#D47341] font-medium">Currently in Week {currentWeek}</span>
+                </div>
+
+                {/* Weekly Timeline */}
+                <div className="w-full overflow-x-auto overflow-y-hidden touch-pan-x mt-6">
+                  <div className="min-w-[800px] py-4">
+                    <svg
+                      viewBox="0 0 800 120"
+                      className="w-full h-[120px]"
+                      preserveAspectRatio="xMidYMid meet"
+                    >
+                      {/* Main Timeline Line */}
+                      <path d="M 50 60 L 750 60" className="stroke-white/20" />
+                      
+                      {/* Day Markers */}
+                      {[
+                        { 
+                          day: 'Sun', 
+                          notes: [
+                            { text: 'Yoga AM', type: 'fitness' },
+                            { text: 'Cardio PM', type: 'fitness' },
+                            { text: 'Reading', type: 'craft' }
+                          ]
+                        },
+                        { 
+                          day: 'Mon', 
+                          notes: [
+                            { text: 'Upper Lift AM', type: 'fitness' },
+                            { text: 'Cardio PM', type: 'fitness' },
+                            { text: 'Coding', type: 'craft' },
+                            { text: 'Product Management', type: 'craft' }
+                          ]
+                        },
+                        { 
+                          day: 'Tue', 
+                          notes: [
+                            { text: 'Coding', type: 'craft' },
+                            { text: 'Product Management', type: 'craft' }
+                          ]
+                        },
+                        { 
+                          day: 'Wed', 
+                          notes: [
+                            { text: 'Coding', type: 'craft' },
+                            { text: 'Product Management', type: 'craft' }
+                          ]
+                        },
+                        { 
+                          day: 'Thu', 
+                          notes: [
+                            { text: 'Coding', type: 'craft' },
+                            { text: 'Product Management', type: 'craft' }
+                          ]
+                        },
+                        { 
+                          day: 'Fri', 
+                          notes: [
+                            { text: 'Coding', type: 'craft' },
+                            { text: 'Product Management', type: 'craft' }
+                          ]
+                        },
+                        { 
+                          day: 'Sat', 
+                          notes: [
+                            { text: 'Reading', type: 'craft' },
+                            { text: 'Coding', type: 'craft' }
+                          ]
+                        }
+                      ].map((item, i) => {
+                        const x = 50 + (i * 116);
+                        const isCurrentDay = i === 5; // Friday is index 5
+                        
+                        return (
+                          <g key={item.day}>
+                            {/* Day Marker Line */}
+                            <path 
+                              d={`M ${x} 50 L ${x} 70`} 
+                              className={`stroke-[#D47341] ${isCurrentDay ? '' : 'opacity-30'}`}
+                            />
+                            
+                            {/* Day Label */}
+                            <text
+                              x={x}
+                              y="90"
+                              textAnchor="middle"
+                              style={{ 
+                                fill: isCurrentDay ? '#D47341' : 'white',
+                                fontSize: '12px',
+                                fontFamily: 'inherit',
+                                fontWeight: isCurrentDay ? 'bold' : 'normal'
+                              }}
+                            >
+                              {item.day}
+                            </text>
+
+                            {/* Activity Notes */}
+                            {item.notes.map((note, index) => (
+                              <text
+                                key={index}
+                                x={x}
+                                y={105 + (index * 15)}
+                                textAnchor="middle"
+                                style={{ 
+                                  fill: isCurrentDay ? '#D47341' : 
+                                        note.type === 'fitness' ? '#800020' :  // burgundy for fitness
+                                        '#4169E1',  // royal blue for craft
+                                  fontSize: '10px',
+                                  fontFamily: 'inherit',
+                                  opacity: 0.9
+                                }}
+                              >
+                                {note.text}
+                              </text>
+                            ))}
+
+                            {/* Current Day Indicator */}
+                            {isCurrentDay && (
+                              <>
+                                <circle 
+                                  cx={x}
+                                  cy="60" 
+                                  r="4" 
+                                  className="fill-[#D47341]" 
+                                />
+                                <rect
+                                  x={x - 58}
+                                  y="40"
+                                  width="116"
+                                  height={40 + (item.notes.length * 15)}
+                                  className="fill-[#D47341]/10"
+                                />
+                              </>
+                            )}
+                          </g>
+                        );
+                      })}
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Base Section */}
           <section className="section-gradient space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
             <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
@@ -293,16 +668,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Empathy Section */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-[#D47341]">Connection</h3>
-                <p className="text-lg text-gray-200">
-                  Leave deep, loving impressions on everyone you encounter.
-                </p>
-                <div className="mt-6 bg-black/30 p-6 rounded-xl">
-                  <EmpathyMetrics />
-                </div>
-              </div>
+              {/* Remove the Connection section from here */}
             </div>
           </section>
 
