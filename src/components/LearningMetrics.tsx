@@ -14,7 +14,7 @@ import {
 import { Line, Bar } from 'react-chartjs-2';
 import { LearningMetric, getLearningMetrics } from '../utils/learning-supabase';
 import { fetchGithubCommits } from '../utils/github';
-import { getBooksPerMonth } from '../utils/books-supabase';
+import { getBooksPerMonth, addBook } from '../utils/books-supabase';
 
 ChartJS.register(
   CategoryScale,
@@ -39,6 +39,13 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
   const [metrics, setMetrics] = useState<{date: string, count: number}[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showAddBook, setShowAddBook] = useState(false);
+  const [newBook, setNewBook] = useState({
+    title: '',
+    completed_at: new Date().toISOString().split('T')[0],
+    notes: '',
+    category: ''
+  });
 
   useEffect(() => {
     if (metricType === 'github_commits') {
@@ -72,6 +79,25 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
       console.error(err);
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function handleAddBook(e: React.FormEvent) {
+    e.preventDefault();
+    try {
+      await addBook(newBook);
+      setShowAddBook(false);
+      setNewBook({
+        title: '',
+        completed_at: new Date().toISOString().split('T')[0],
+        notes: '',
+        category: ''
+      });
+      // Reload book metrics
+      await loadBookMetrics();
+    } catch (err) {
+      console.error('Failed to add book:', err);
+      alert('Failed to add book. Please try again.');
     }
   }
 
@@ -187,9 +213,85 @@ function LearningChart({ title, metricType, yAxisLabel, options: chartOptions }:
       <div className="aspect-square">
         <ChartComponent data={chartData} options={defaultOptions} />
       </div>
+      {metricType === 'books_per_month' && (
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={() => setShowAddBook(true)}
+            className="text-sm px-3 py-1.5 bg-[#D47341]/20 hover:bg-[#D47341]/30 text-[#D47341] rounded-lg transition-colors"
+          >
+            + Add Book
+          </button>
+        </div>
+      )}
       {metricType === 'github_commits' && (
         <div className="text-xs text-gray-400 text-center italic mt-4">
           Commits are updated automatically when page loads
+        </div>
+      )}
+
+      {/* Add Book Modal */}
+      {showAddBook && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-[#1c1c1e] p-6 rounded-xl w-full max-w-md mx-4 shadow-xl">
+            <h3 className="text-xl font-semibold text-white mb-4">Add Book</h3>
+            <form onSubmit={handleAddBook} className="space-y-4">
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Title</label>
+                <input
+                  type="text"
+                  value={newBook.title}
+                  onChange={(e) => setNewBook(prev => ({ ...prev, title: e.target.value }))}
+                  className="w-full px-3 py-2 bg-black/30 rounded border border-[#D47341]/20 text-white placeholder-gray-500"
+                  placeholder="Enter book title"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Completion Date</label>
+                <input
+                  type="date"
+                  value={newBook.completed_at}
+                  onChange={(e) => setNewBook(prev => ({ ...prev, completed_at: e.target.value }))}
+                  className="w-full px-3 py-2 bg-black/30 rounded border border-[#D47341]/20 text-white"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Category</label>
+                <input
+                  type="text"
+                  value={newBook.category || ''}
+                  onChange={(e) => setNewBook(prev => ({ ...prev, category: e.target.value }))}
+                  className="w-full px-3 py-2 bg-black/30 rounded border border-[#D47341]/20 text-white placeholder-gray-500"
+                  placeholder="Enter book category (optional)"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Notes</label>
+                <textarea
+                  value={newBook.notes || ''}
+                  onChange={(e) => setNewBook(prev => ({ ...prev, notes: e.target.value }))}
+                  className="w-full px-3 py-2 bg-black/30 rounded border border-[#D47341]/20 text-white placeholder-gray-500 h-24 resize-none"
+                  placeholder="Enter notes (optional)"
+                />
+              </div>
+              <div className="flex justify-end space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setShowAddBook(false)}
+                  className="px-4 py-2 text-gray-400 hover:text-white transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-[#D47341] text-white rounded hover:bg-[#D47341]/80 transition-colors"
+                >
+                  Add Book
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>
