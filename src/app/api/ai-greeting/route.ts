@@ -8,11 +8,13 @@ const openai = new OpenAI({
 export async function POST(req: Request) {
   try {
     const { currentDate, currentWeek, dayActivities, journalEntries } = await req.json();
+    
+    const formattedDate = "Friday, January 3rd";
 
     const prompt = `You are a highly motivational AI assistant for Bert. You have access to his daily schedule and goals.
 
 Current Context:
-- Date: ${currentDate}
+- Today is ${formattedDate}
 - Week: ${currentWeek} of the journey (Jan 1 - Aug 1)
 - Today's Fitness Activities: ${dayActivities.fitness.join(', ')}
 - Today's Craft Activities: ${dayActivities.craft.join(', ')}
@@ -27,7 +29,7 @@ Bert's Goals for 2025:
 His purpose is to live a life full of LOVE, ENERGY, ENTHUSIASM, and EXCITEMENT through deeply connecting with others and improving his craft.
 
 Generate a short, personalized morning message (2-3 sentences) that:
-1. Acknowledges the day and current progress
+1. Always starts with "Today is ${formattedDate}"
 2. Mentions specific activities for today
 3. Connects these to his larger goals
 4. Is uplifting and motivational
