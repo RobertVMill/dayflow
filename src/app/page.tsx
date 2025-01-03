@@ -462,7 +462,8 @@ export default function Home() {
                             { text: 'Meditation 45m', type: 'fitness' },
                             { text: 'Yoga AM', type: 'fitness' },
                             { text: 'Cardio PM', type: 'fitness' },
-                            { text: 'Reading', type: 'craft' }
+                            { text: 'Reading', type: 'craft' },
+                            { text: 'Blog', type: 'craft' }
                           ]
                         },
                         { 

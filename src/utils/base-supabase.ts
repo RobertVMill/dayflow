@@ -19,14 +19,15 @@ export type MetricType =
   | 'plant_based'
   | 'reliability'
   | 'savings'
-  | 'reading'
   | 'meditation'
-  | 'cold_plunge'
   | 'walking'
   | 'jazz_abstinence'
   | 'yoga'
   | 'clean_space'
-  | 'github_commits';
+  | 'github_commits'
+  | 'good_deeds'
+  | 'connections'
+  | 'read_til_sleepy';
 
 export interface BaseMetric {
   id: string;
@@ -114,6 +115,12 @@ export function getMetricLabel(metric_type: MetricType): string {
       return 'Clean Space';
     case 'github_commits':
       return 'GitHub Commits';
+    case 'good_deeds':
+      return 'Good Deeds Done';
+    case 'connections':
+      return 'Deep Connections';
+    case 'read_til_sleepy':
+      return 'Read til sleepy';
     default:
       return metric_type;
   }
