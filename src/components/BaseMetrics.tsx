@@ -90,7 +90,10 @@ function BaseChart({
   }, [metricType]);
 
   useEffect(() => {
-    if ((metricType === 'jazz_abstinence' || metricType === 'yoga') && metrics.length > 0) {
+    if ((metricType === 'jazz_abstinence' || metricType === 'yoga' || 
+         metricType === 'clean_space' || metricType === 'sunlight' ||
+         metricType === 'meditation' || metricType === 'walking' ||
+         metricType === 'read_til_sleepy') && metrics.length > 0) {
       calculateStreak();
     }
   }, [metrics, metricType]);
@@ -118,8 +121,10 @@ function BaseChart({
         } else {
           break;
         }
-      } else if (metricType === 'yoga') {
-        if (metric.value === 1) { // 1 means did yoga
+      } else if (metricType === 'yoga' || metricType === 'clean_space' || 
+                 metricType === 'sunlight' || metricType === 'meditation' || 
+                 metricType === 'walking' || metricType === 'read_til_sleepy') {
+        if (metric.value === 1) { // 1 means completed the activity
           currentStreak++;
         } else {
           break;
@@ -304,21 +309,29 @@ function BaseChart({
 
   return (
     <div className="w-full p-2 sm:p-4 bg-black/30 rounded-lg">
-      {metricType !== 'jazz_abstinence' && metricType !== 'yoga' && (
+      {metricType !== 'jazz_abstinence' && metricType !== 'yoga' && 
+       metricType !== 'clean_space' && metricType !== 'sunlight' &&
+       metricType !== 'meditation' && metricType !== 'walking' &&
+       metricType !== 'read_til_sleepy' && (
         <div className="h-[180px] sm:h-[200px] mb-4">
           <Line data={chartData} options={defaultOptions} />
         </div>
       )}
-      {metricType === 'jazz_abstinence' && (
+      {(metricType === 'jazz_abstinence' || metricType === 'yoga' || 
+        metricType === 'clean_space' || metricType === 'sunlight' ||
+        metricType === 'meditation' || metricType === 'walking' ||
+        metricType === 'read_til_sleepy') && (
         <div className="py-8 text-center">
           <div className="text-4xl font-bold text-[#D47341]">{streak} Days</div>
-          <div className="text-gray-400 mt-2">Without Jazz</div>
-        </div>
-      )}
-      {metricType === 'yoga' && (
-        <div className="py-8 text-center">
-          <div className="text-4xl font-bold text-[#D47341]">{streak} Days</div>
-          <div className="text-gray-400 mt-2">Yoga Streak</div>
+          <div className="text-gray-400 mt-2">
+            {metricType === 'jazz_abstinence' && 'Without Jazz'}
+            {metricType === 'yoga' && 'Yoga Streak'}
+            {metricType === 'clean_space' && 'Clean while brushing teeth Streak'}
+            {metricType === 'sunlight' && '30 min Sunlight Streak'}
+            {metricType === 'meditation' && 'Meditation Streak'}
+            {metricType === 'walking' && 'Walking Streak'}
+            {metricType === 'read_til_sleepy' && 'Read til sleepy Streak'}
+          </div>
         </div>
       )}
       <div className="flex flex-col gap-2">
@@ -543,10 +556,40 @@ export default function BaseMetrics() {
       </div>
 
       <div className="space-y-4 sm:space-y-6">
+        <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Connection & Impact</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <BaseChart
+            title="Good Deeds Done"
+            metricType="good_deeds"
+            yAxisLabel="deeds"
+            value={values.good_deeds || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, good_deeds: value }))}
+          />
+          <BaseChart
+            title="Deep Connections"
+            metricType="connections"
+            yAxisLabel="activities"
+            value={values.connections || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, connections: value }))}
+            options={{
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    stepSize: 1
+                  }
+                }
+              }
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="space-y-4 sm:space-y-6">
         <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Success Habits</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <BaseChart
-            title="Clean and Organized Space"
+            title="Clean and Organize while brushing teeth"
             metricType="clean_space"
             yAxisLabel=""
             isBinary={true}
@@ -592,6 +635,14 @@ export default function BaseMetrics() {
             isBinary={true}
             value={values.walking || ''}
             onValueChange={(value) => setValues(prev => ({ ...prev, walking: value }))}
+          />
+          <BaseChart
+            title="Read til sleepy"
+            metricType="read_til_sleepy"
+            yAxisLabel=""
+            isBinary={true}
+            value={values.read_til_sleepy || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, read_til_sleepy: value }))}
           />
           <BaseChart
             title="Jazz Abstinence"
