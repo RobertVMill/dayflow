@@ -664,7 +664,7 @@ export default function Home() {
               Relentlessly build the base
             </h2>
             <p className="text-[#D47341] text-lg opacity-90">
-              Build so much seretonin that you can work extremely hard without burning out
+              Others can't go 7 days a week, 7am-9pm every day, because their seretonin levels won't allow it. 
             </p>
             
             {/* Foundation SVG */}
