@@ -11,24 +11,24 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY!
 );
 
+async function getRecentPositiveFeedback() {
+  const { data: recentFeedback } = await supabase
+    .from('ai_feedback')
+    .select('message, comment')
+    .eq('feedback_type', 'positive')
+    .order('created_at', { ascending: false })
+    .limit(3);
+
+  if (!recentFeedback?.length) return '';
+
+  return `\nLearning from recent positive feedback:
+${recentFeedback.map(f => f.comment ? `- "${f.comment}"` : '').filter(Boolean).join('\n')}`;
+}
+
 export async function POST(req: Request) {
   try {
     const { currentDate, currentWeek, dayActivities } = await req.json();
-
-    // Fetch recent feedback to learn from
-    const { data: recentFeedback } = await supabase
-      .from('ai_feedback')
-      .select('message, feedback_type, comment')
-      .order('created_at', { ascending: false })
-      .limit(5);
-
-    // Process feedback to create learning context
-    const feedbackContext = recentFeedback?.length 
-      ? `\nLearning from recent feedback:
-${recentFeedback.map(f => `- Message: "${f.message}"
-  Feedback: ${f.feedback_type}${f.comment ? `\n  Comment: ${f.comment}` : ''}`).join('\n')}`
-      : '';
-
+    const feedbackContext = await getRecentPositiveFeedback();
     const formattedDate = "Friday, January 3rd";
 
     const prompt = `You are a highly motivational AI assistant for Bert. You have access to his daily schedule and goals.
@@ -54,7 +54,7 @@ Generate a short, personalized morning message (2-3 sentences) that:
 3. Connects these to his larger goals
 4. Is uplifting and motivational
 5. Uses emojis sparingly but effectively
-6. Takes into account the feedback on previous messages to improve the response`;
+6. Takes into account any positive feedback to maintain what users like`;
 
     const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],

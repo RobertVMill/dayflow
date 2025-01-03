@@ -15,6 +15,7 @@ export default function AIGreeting({ currentDate, currentWeek, dayActivities }: 
   const [showFeedback, setShowFeedback] = useState(false);
   const [feedback, setFeedback] = useState('');
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
+  const [selectedType, setSelectedType] = useState<'positive' | 'negative' | null>(null);
 
   useEffect(() => {
     fetchGreeting();
@@ -56,22 +57,28 @@ export default function AIGreeting({ currentDate, currentWeek, dayActivities }: 
         },
         body: JSON.stringify({
           message: greeting,
-          feedbackType: type,
+          feedback_type: type,
           comment: feedback,
-          timestamp: new Date().toISOString(),
+          created_at: new Date().toISOString(),
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to submit feedback');
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('Server error:', error);
+        throw new Error(error.error || 'Failed to submit feedback');
+      }
       
       setFeedbackSubmitted(true);
       setTimeout(() => {
         setShowFeedback(false);
         setFeedbackSubmitted(false);
         setFeedback('');
+        setSelectedType(null);
       }, 2000);
     } catch (error) {
       console.error('Error submitting feedback:', error);
+      alert('Failed to submit feedback. Please try again.');
     }
   }
 
@@ -96,7 +103,7 @@ export default function AIGreeting({ currentDate, currentWeek, dayActivities }: 
                   <button
                     onClick={() => {
                       setShowFeedback(true);
-                      submitFeedback('positive');
+                      setSelectedType('positive');
                     }}
                     className="text-[#D47341] hover:text-[#D47341]/80 transition-colors"
                     title="This message was helpful"
@@ -106,7 +113,7 @@ export default function AIGreeting({ currentDate, currentWeek, dayActivities }: 
                   <button
                     onClick={() => {
                       setShowFeedback(true);
-                      submitFeedback('negative');
+                      setSelectedType('negative');
                     }}
                     className="text-[#D47341] hover:text-[#D47341]/80 transition-colors"
                     title="This message could be better"
@@ -129,13 +136,14 @@ export default function AIGreeting({ currentDate, currentWeek, dayActivities }: 
                       onClick={() => {
                         setShowFeedback(false);
                         setFeedback('');
+                        setSelectedType(null);
                       }}
                       className="px-3 py-1 text-sm text-gray-400 hover:text-gray-300 transition-colors"
                     >
                       Cancel
                     </button>
                     <button
-                      onClick={() => submitFeedback('positive')}
+                      onClick={() => selectedType && submitFeedback(selectedType)}
                       className="px-3 py-1 bg-[#D47341]/20 hover:bg-[#D47341]/30 text-[#D47341] rounded text-sm transition-colors"
                     >
                       Submit
