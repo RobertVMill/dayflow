@@ -1,32 +1,49 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { createClient } from '@supabase/supabase-js';
+import { supabaseAdmin } from '@/utils/supabase-client';
+
+// Check required environment variables
+if (!process.env.OPENAI_API_KEY) {
+  console.error('Missing OPENAI_API_KEY environment variable');
+}
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_KEY!
-);
-
 async function getRecentPositiveFeedback() {
-  const { data: recentFeedback } = await supabase
-    .from('ai_feedback')
-    .select('message, comment')
-    .eq('feedback_type', 'positive')
-    .order('created_at', { ascending: false })
-    .limit(3);
+  try {
+    const { data: recentFeedback, error } = await supabaseAdmin
+      .from('ai_feedback')
+      .select('message, comment')
+      .eq('feedback_type', 'positive')
+      .order('created_at', { ascending: false })
+      .limit(3);
 
-  if (!recentFeedback?.length) return '';
+    if (error) {
+      console.error('Error fetching feedback:', error);
+      return '';
+    }
 
-  return `\nLearning from recent positive feedback:
+    if (!recentFeedback?.length) return '';
+
+    return `\nLearning from recent positive feedback:
 ${recentFeedback.map(f => f.comment ? `- "${f.comment}"` : '').filter(Boolean).join('\n')}`;
+  } catch (error) {
+    console.error('Error in getRecentPositiveFeedback:', error);
+    return '';
+  }
 }
 
 export async function POST(req: Request) {
   try {
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json(
+        { error: 'OpenAI API key not configured' },
+        { status: 500 }
+      );
+    }
+
     const { currentDate, currentWeek, dayActivities } = await req.json();
     const feedbackContext = await getRecentPositiveFeedback();
     const formattedDate = "Friday, January 3rd";
@@ -66,8 +83,9 @@ Generate a short, personalized morning message (2-3 sentences) that:
     return NextResponse.json({ message: completion.choices[0].message.content });
   } catch (error) {
     console.error('Error generating AI greeting:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to generate greeting';
     return NextResponse.json(
-      { error: 'Failed to generate greeting' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
