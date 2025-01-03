@@ -304,21 +304,52 @@ export default function Home() {
                         const baseSpacing = 125;
                         const spacing = baseSpacing * timelineScale;
                         const x = 50 + i * spacing;
+                        const needsHaircut = month === 'Feb' || month === 'Apr' || month === 'Jun';
                         
                         return (
-                          <text
-                            key={month}
-                            x={x}
-                            y="60"
-                            textAnchor="middle"
-                            style={{ 
-                              fill: '#D47341',
-                              fontSize: '12px',
-                              fontFamily: 'inherit'
-                            }}
-                          >
-                            {month}
-                          </text>
+                          <g key={month}>
+                            <text
+                              x={x}
+                              y="60"
+                              textAnchor="middle"
+                              style={{ 
+                                fill: '#D47341',
+                                fontSize: '12px',
+                                fontFamily: 'inherit'
+                              }}
+                            >
+                              {month}
+                            </text>
+                            {needsHaircut && (
+                              <text
+                                x={x}
+                                y="75"
+                                textAnchor="middle"
+                                style={{ 
+                                  fill: '#FFE4C4',
+                                  fontSize: '10px',
+                                  fontFamily: 'inherit',
+                                  opacity: 0.9
+                                }}
+                              >
+                                Haircut
+                              </text>
+                            )}
+                            {/* Go out label for each month */}
+                            <text
+                              x={x}
+                              y={needsHaircut ? "90" : "75"}
+                              textAnchor="middle"
+                              style={{ 
+                                fill: '#ADD8E6',  // light blue like craft activities
+                                fontSize: '10px',
+                                fontFamily: 'inherit',
+                                opacity: 0.9
+                              }}
+                            >
+                              Go out
+                            </text>
+                          </g>
                         );
                       })}
 
