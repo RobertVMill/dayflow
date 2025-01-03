@@ -1,14 +1,34 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { createClient } from '@supabase/supabase-js';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_KEY!
+);
+
 export async function POST(req: Request) {
   try {
-    const { currentDate, currentWeek, dayActivities, journalEntries } = await req.json();
-    
+    const { currentDate, currentWeek, dayActivities } = await req.json();
+
+    // Fetch recent feedback to learn from
+    const { data: recentFeedback } = await supabase
+      .from('ai_feedback')
+      .select('message, feedback_type, comment')
+      .order('created_at', { ascending: false })
+      .limit(5);
+
+    // Process feedback to create learning context
+    const feedbackContext = recentFeedback?.length 
+      ? `\nLearning from recent feedback:
+${recentFeedback.map(f => `- Message: "${f.message}"
+  Feedback: ${f.feedback_type}${f.comment ? `\n  Comment: ${f.comment}` : ''}`).join('\n')}`
+      : '';
+
     const formattedDate = "Friday, January 3rd";
 
     const prompt = `You are a highly motivational AI assistant for Bert. You have access to his daily schedule and goals.
@@ -26,14 +46,15 @@ Bert's Goals for 2025:
 4. Take average recovery score from 60 to 80
 5. Get more ripped than ever (bottom abs showing)
 
-His purpose is to live a life full of LOVE, ENERGY, ENTHUSIASM, and EXCITEMENT through deeply connecting with others and improving his craft.
+His purpose is to live a life full of LOVE, ENERGY, ENTHUSIASM, and EXCITEMENT through deeply connecting with others and improving his craft.${feedbackContext}
 
 Generate a short, personalized morning message (2-3 sentences) that:
 1. Always starts with "Today is ${formattedDate}"
 2. Mentions specific activities for today
 3. Connects these to his larger goals
 4. Is uplifting and motivational
-5. Uses emojis sparingly but effectively`;
+5. Uses emojis sparingly but effectively
+6. Takes into account the feedback on previous messages to improve the response`;
 
     const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
