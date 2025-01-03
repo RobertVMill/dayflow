@@ -416,8 +416,8 @@ export default function Home() {
                 <div className="w-full overflow-x-auto overflow-y-hidden touch-pan-x mt-6">
                   <div className="min-w-[800px] py-4">
                     <svg
-                      viewBox="0 0 800 120"
-                      className="w-full h-[120px]"
+                      viewBox="0 0 800 240"
+                      className="w-full h-[240px]"
                       preserveAspectRatio="xMidYMid meet"
                     >
                       {/* Main Timeline Line */}
@@ -428,6 +428,7 @@ export default function Home() {
                         { 
                           day: 'Sun', 
                           notes: [
+                            { text: 'Meditation 45m', type: 'fitness' },
                             { text: 'Yoga AM', type: 'fitness' },
                             { text: 'Cardio PM', type: 'fitness' },
                             { text: 'Reading', type: 'craft' }
@@ -436,43 +437,64 @@ export default function Home() {
                         { 
                           day: 'Mon', 
                           notes: [
-                            { text: 'Upper Lift AM', type: 'fitness' },
-                            { text: 'Cardio PM', type: 'fitness' },
+                            { text: 'Meditation 30m', type: 'fitness' },
+                            { text: 'Upper Lift', type: 'fitness' },
+                            { text: 'Cardio', type: 'fitness' },
                             { text: 'Coding', type: 'craft' },
-                            { text: 'Product Management', type: 'craft' }
+                            { text: 'Product Management', type: 'craft' },
+                            { text: 'Expert Chat', type: 'craft' }
                           ]
                         },
                         { 
                           day: 'Tue', 
                           notes: [
+                            { text: 'Meditation 30m', type: 'fitness' },
+                            { text: 'Lower Lift', type: 'fitness' },
+                            { text: 'Yoga', type: 'fitness' },
                             { text: 'Coding', type: 'craft' },
-                            { text: 'Product Management', type: 'craft' }
+                            { text: 'Product Management', type: 'craft' },
+                            { text: 'Expert Chat', type: 'craft' }
                           ]
                         },
                         { 
                           day: 'Wed', 
                           notes: [
+                            { text: 'Meditation 30m', type: 'fitness' },
+                            { text: 'Cardio AM', type: 'fitness' },
+                            { text: 'Yoga PM', type: 'fitness' },
                             { text: 'Coding', type: 'craft' },
-                            { text: 'Product Management', type: 'craft' }
+                            { text: 'Product Management', type: 'craft' },
+                            { text: 'Expert Chat', type: 'craft' }
                           ]
                         },
                         { 
                           day: 'Thu', 
                           notes: [
+                            { text: 'Meditation 30m', type: 'fitness' },
+                            { text: 'Upper Lift', type: 'fitness' },
+                            { text: 'Cardio', type: 'fitness' },
                             { text: 'Coding', type: 'craft' },
-                            { text: 'Product Management', type: 'craft' }
+                            { text: 'Product Management', type: 'craft' },
+                            { text: 'Expert Chat', type: 'craft' }
                           ]
                         },
                         { 
                           day: 'Fri', 
                           notes: [
+                            { text: 'Meditation 30m', type: 'fitness' },
+                            { text: 'Lower Lift', type: 'fitness' },
+                            { text: 'Yoga', type: 'fitness' },
                             { text: 'Coding', type: 'craft' },
-                            { text: 'Product Management', type: 'craft' }
+                            { text: 'Product Management', type: 'craft' },
+                            { text: 'Expert Chat', type: 'craft' }
                           ]
                         },
                         { 
                           day: 'Sat', 
                           notes: [
+                            { text: 'Meditation 45m', type: 'fitness' },
+                            { text: 'Cardio', type: 'fitness' },
+                            { text: 'Yoga', type: 'fitness' },
                             { text: 'Reading', type: 'craft' },
                             { text: 'Coding', type: 'craft' }
                           ]
@@ -480,6 +502,13 @@ export default function Home() {
                       ].map((item, i) => {
                         const x = 50 + (i * 116);
                         const isCurrentDay = i === 5; // Friday is index 5
+                        
+                        // Sort notes to put fitness first
+                        const sortedNotes = [...item.notes].sort((a, b) => {
+                          if (a.type === 'fitness' && b.type === 'craft') return -1;
+                          if (a.type === 'craft' && b.type === 'fitness') return 1;
+                          return 0;
+                        });
                         
                         return (
                           <g key={item.day}>
@@ -505,16 +534,16 @@ export default function Home() {
                             </text>
 
                             {/* Activity Notes */}
-                            {item.notes.map((note, index) => (
+                            {sortedNotes.map((note, index) => (
                               <text
                                 key={index}
                                 x={x}
-                                y={105 + (index * 15)}
+                                y={110 + (index * 24)}
                                 textAnchor="middle"
                                 style={{ 
                                   fill: isCurrentDay ? '#D47341' : 
-                                        note.type === 'fitness' ? '#800020' :  // burgundy for fitness
-                                        '#4169E1',  // royal blue for craft
+                                        note.type === 'fitness' ? '#FFE4C4' :  // bisque color for fitness
+                                        '#ADD8E6',  // light blue for craft
                                   fontSize: '10px',
                                   fontFamily: 'inherit',
                                   opacity: 0.9
@@ -537,7 +566,7 @@ export default function Home() {
                                   x={x - 58}
                                   y="40"
                                   width="116"
-                                  height={40 + (item.notes.length * 15)}
+                                  height={160}
                                   className="fill-[#D47341]/10"
                                 />
                               </>
