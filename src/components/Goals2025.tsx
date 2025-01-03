@@ -51,8 +51,6 @@ export default function Goals2025() {
         return 'Product Manager Meetings';
       case 'mayfair_savings':
         return 'Mayfair Lakeshore Savings';
-      case 'jazz_sessions':
-        return 'Jazz Practice Sessions';
       default:
         return goalType;
     }
