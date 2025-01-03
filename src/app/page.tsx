@@ -663,6 +663,9 @@ export default function Home() {
             <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
               Relentlessly build the base
             </h2>
+            <p className="text-[#D47341] text-lg opacity-90">
+              Build so much seretonin that you can work extremely hard without burning out
+            </p>
             
             {/* Foundation SVG */}
             <div className="w-full max-w-xl mx-auto py-4">
@@ -724,6 +727,9 @@ export default function Home() {
             <h2 className="text-4xl font-bold tracking-tight text-white">
               Relentlessly work on your craft
             </h2>
+            <p className="text-[#D47341] text-lg opacity-90">
+              Work so extremely hard that you become the undisputed greatest in your field
+            </p>
 
             {/* Differentiation SVG */}
             <div className="w-full max-w-xl mx-auto py-4">
@@ -767,7 +773,7 @@ export default function Home() {
               <div className="space-y-4">
                 <h3 className="text-2xl font-semibold text-[#D47341]">Product Management</h3>
                 <p className="text-lg text-gray-200">
-                  Be one of the greatest in the world at building AI products people love.
+                  Build a reputation among professionals in Toronto as an astonishing AI product builder.
                 </p>
                 <div className="mt-6 bg-black/30 p-6 rounded-xl">
                   <LearningMetrics />

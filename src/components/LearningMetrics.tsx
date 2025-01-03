@@ -302,7 +302,7 @@ export default function LearningMetrics() {
   return (
     <div className="w-full grid gap-6 sm:gap-8 -mx-2 sm:mx-0">
       <div className="space-y-4 sm:space-y-6">
-        <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Reading & Development</h4>
+        <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Others can't go 7 days a week, 7am-9pm every day, others can't read 5 books a week, others can't make 500 commits a week. Others can't have 10 great in-person industry expert meetings a week.</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <LearningChart
             title="Books Read"
