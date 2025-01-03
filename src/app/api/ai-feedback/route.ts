@@ -8,20 +8,23 @@ const supabase = createClient(
 
 export async function POST(req: Request) {
   try {
-    const { message, feedbackType, comment, timestamp } = await req.json();
+    const { message, feedback_type, comment, created_at } = await req.json();
 
     const { error } = await supabase
       .from('ai_feedback')
       .insert([
         {
           message,
-          feedback_type: feedbackType,
+          feedback_type,
           comment,
-          created_at: timestamp,
+          created_at,
         },
       ]);
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error:', error);
+      throw error;
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {
