@@ -767,7 +767,7 @@ export default function Home() {
               <div className="space-y-4">
                 <h3 className="text-2xl font-semibold text-[#D47341]">Product Management</h3>
                 <p className="text-lg text-gray-200">
-                  Build insanely great products.
+                  Be one of the greatest in the world at building AI products people love.
                 </p>
                 <div className="mt-6 bg-black/30 p-6 rounded-xl">
                   <LearningMetrics />
