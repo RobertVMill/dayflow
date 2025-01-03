@@ -8,6 +8,7 @@ import EmpathyMetrics from '../components/EmpathyMetrics';
 import BaseMetrics from '../components/BaseMetrics';
 import JournalEntries from '../components/JournalEntries';
 import { fetchGithubCommits } from '../utils/github';
+import AIGreeting from '../components/AIGreeting';
 
 export default function Home() {
   const router = useRouter();
@@ -24,6 +25,39 @@ export default function Home() {
   const currentDayPosition = 50 + (daysSinceStart * (baseSpacing / 7));
   const weekStartX = 50 + ((currentWeek - 1) * baseSpacing);
   const weekEndX = 50 + (currentWeek * baseSpacing);
+
+  // Get current day's activities
+  const currentDayIndex = new Date().getDay(); // 0 = Sunday, 1 = Monday, etc.
+  const weeklyActivities = [
+    { // Sunday
+      fitness: ['Meditation 45m', 'Yoga AM', 'Cardio PM'],
+      craft: ['Reading', 'Blog']
+    },
+    { // Monday
+      fitness: ['Meditation 30m', 'Upper Lift', 'Cardio'],
+      craft: ['Coding', 'Product Management', 'Expert Chat']
+    },
+    { // Tuesday
+      fitness: ['Meditation 30m', 'Lower Lift', 'Yoga'],
+      craft: ['Coding', 'Product Management', 'Expert Chat']
+    },
+    { // Wednesday
+      fitness: ['Meditation 30m', 'Cardio AM', 'Yoga PM'],
+      craft: ['Coding', 'Product Management', 'Expert Chat']
+    },
+    { // Thursday
+      fitness: ['Meditation 30m', 'Upper Lift', 'Cardio'],
+      craft: ['Coding', 'Product Management', 'Expert Chat']
+    },
+    { // Friday
+      fitness: ['Meditation 30m', 'Lower Lift', 'Yoga'],
+      craft: ['Coding', 'Product Management', 'Expert Chat']
+    },
+    { // Saturday
+      fitness: ['Meditation 45m', 'Cardio', 'Yoga'],
+      craft: ['Reading', 'Coding']
+    }
+  ];
 
   useEffect(() => {
     try {
@@ -65,6 +99,11 @@ export default function Home() {
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <main className="space-y-16">
+          <AIGreeting 
+            currentDate={currentDate}
+            currentWeek={currentWeek}
+            dayActivities={weeklyActivities[currentDayIndex]}
+          />
           {/* Vision Section */}
           <section className="section-gradient space-y-6 p-8 rounded-2xl bg-[#1c1c1e]/50 backdrop-blur-sm">
             <h1 className="text-5xl font-bold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent animate-vision">Purpose</h1>
@@ -129,6 +168,9 @@ export default function Home() {
               <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
                 2025: The Barbell Year
               </h2>
+              <p className="text-lg text-white/70 italic">
+                Become antifragile through maximizing baseline serotonin, then take massive action on business goals
+              </p>
               <ul className="space-y-6 text-lg">
                 <li className="flex items-start space-x-4">
                   <div className="w-8 h-8 flex-shrink-0 mt-1">
@@ -194,6 +236,9 @@ export default function Home() {
               <h2 className="text-4xl font-semibold tracking-tight bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
                 Jan 1 - Aug 1: The Journey
               </h2>
+              <p className="text-[#D47341] text-lg opacity-90">
+                String together 7 months of excellent base building and extreme work output, and you will reach your goals
+              </p>
               
               {/* Timeline Visualization */}
               <div className="w-full overflow-x-auto overflow-y-hidden touch-pan-x">
