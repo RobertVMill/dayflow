@@ -131,6 +131,10 @@ export default function Home() {
                   <span className="text-[#D47341] mt-1.5">•</span>
                   <span>Get a membership at the Mayfair Lakeshore</span>
                 </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-[#D47341] mt-1.5">•</span>
+                  <span>100 Jazz sessions</span>
+                </li>
               </ul>
             </div>
           </section>
