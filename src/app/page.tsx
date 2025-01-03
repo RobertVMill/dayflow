@@ -73,7 +73,7 @@ export default function Home() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-semibold text-white mb-2">Success is a life full of <span className="text-pink-400">LOVE</span>, <span className="text-yellow-400">ENERGY</span>, <span className="text-emerald-400">ENTHUSIASM</span>, and <span className="text-[#D47341]">EXCITEMENT</span>. You achieve these by fully expressing your gifts to the worldthrough the pain and keeping your heart open to possibility.</h3>
+                  <h3 className="text-2xl font-semibold text-white mb-2">Success is a life full of <span className="text-pink-400">LOVE</span>, <span className="text-yellow-400">ENERGY</span>, <span className="text-emerald-400">ENTHUSIASM</span>, and <span className="text-[#D47341]">EXCITEMENT</span>. You achieve this by deeply conencting with others and improving your craft.</h3>
                 </div>
               </div>
 
@@ -88,23 +88,23 @@ export default function Home() {
                   </svg>
                 </div>
                 <div className="flex-1 space-y-4">
-                  <h3 className="text-2xl font-semibold text-white">To fully express your gifts to the world:</h3>
+                  <h3 className="text-2xl font-semibold text-white">To deeply connect and imrpove your craft</h3>
                   <ul className="space-y-4 text-xl text-gray-300">
                     <li className="flex items-start space-x-3">
                       <span className="text-[#D47341] mt-1.5">•</span>
-                      <span>Relentlessly strengthen the base</span>
+                      <span>Relentlessly build your base</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <span className="text-[#D47341] mt-1.5">•</span>
-                      <span>Follow god's plan, through the pain</span>
+                      <span>Relentlessly follow god's signals</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <span className="text-[#D47341] mt-1.5">•</span>
-                      <span>Relentlessly work on your craft, through the pain</span>
+                      <span>Relentlessly practice your craft</span>
                     </li>
                     <li className="flex items-start space-x-3">
                       <span className="text-[#D47341] mt-1.5">•</span>
-                      <span>Forget about anything that's not the above</span>
+                      <span>Relentlessly disregard all distraction</span>
                     </li>
                   </ul>
                 </div>
@@ -133,7 +133,11 @@ export default function Home() {
                 </li>
                 <li className="flex items-start space-x-3">
                   <span className="text-[#D47341] mt-1.5">•</span>
-                  <span>100 Jazz sessions</span>
+                  <span>Take my average recovery score from 60 to 80</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-[#D47341] mt-1.5">•</span>
+                  <span>Be more ripped than ever before (bottom abs showing)</span>
                 </li>
               </ul>
             </div>
@@ -146,9 +150,9 @@ export default function Home() {
             </h2>
             
             {/* Foundation SVG */}
-            <div className="w-full max-w-2xl mx-auto py-8">
+            <div className="w-full max-w-xl mx-auto py-4">
               <svg
-                viewBox="0 0 400 200"
+                viewBox="0 0 400 140"
                 className="w-full h-auto stroke-[#D47341] fill-none stroke-[3]"
                 style={{ 
                   strokeLinecap: 'round', 
@@ -157,33 +161,33 @@ export default function Home() {
                 }}
               >
                 {/* Ground Line */}
-                <path d="M 50 150 L 350 150" className="stroke-white/20" />
+                <path d="M 50 100 L 350 100" className="stroke-white/20" />
                 
                 {/* Foundation Base */}
                 <path 
-                  d="M 100 150 L 300 150 L 280 180 L 120 180 Z" 
+                  d="M 100 100 L 300 100 L 280 120 L 120 120 Z" 
                   className="fill-[#D47341]/20 stroke-[#D47341]" 
                 />
                 
                 {/* Support Lines */}
                 <g className="stroke-[#D47341]">
-                  <path d="M 120 150 L 120 130" />
-                  <path d="M 160 150 L 160 130" />
-                  <path d="M 200 150 L 200 130" />
-                  <path d="M 240 150 L 240 130" />
-                  <path d="M 280 150 L 280 130" />
+                  <path d="M 120 100 L 120 85" />
+                  <path d="M 160 100 L 160 85" />
+                  <path d="M 200 100 L 200 85" />
+                  <path d="M 240 100 L 240 85" />
+                  <path d="M 280 100 L 280 85" />
                 </g>
                 
                 {/* Foundation Top */}
-                <path d="M 100 130 L 300 130" className="stroke-[#D47341]" />
+                <path d="M 100 85 L 300 85" className="stroke-[#D47341]" />
                 
                 {/* Decorative Growth Lines */}
                 <path 
-                  d="M 80 150 C 80 100, 320 100, 320 150" 
+                  d="M 80 100 C 80 60, 320 60, 320 100" 
                   className="stroke-[#D47341]/30" 
                 />
                 <path 
-                  d="M 90 150 C 90 110, 310 110, 310 150" 
+                  d="M 90 100 C 90 70, 310 70, 310 100" 
                   className="stroke-[#D47341]/20" 
                 />
               </svg>
@@ -207,9 +211,9 @@ export default function Home() {
             </h2>
 
             {/* Differentiation SVG */}
-            <div className="w-full max-w-2xl mx-auto py-8">
+            <div className="w-full max-w-xl mx-auto py-4">
               <svg
-                viewBox="0 0 400 200"
+                viewBox="0 0 400 140"
                 className="w-full h-auto stroke-[#D47341] fill-none stroke-[3]"
                 style={{ 
                   strokeLinecap: 'round', 
@@ -219,51 +223,31 @@ export default function Home() {
               >
                 {/* Central Growth Line */}
                 <path 
-                  d="M 200 180 L 200 40" 
+                  d="M 200 120 L 200 40" 
                   className="stroke-[#D47341]" 
                 />
                 
                 {/* Diverging Paths */}
                 <g className="stroke-[#D47341]">
-                  <path d="M 200 120 L 140 60" />
-                  <path d="M 200 120 L 260 60" />
-                  <path d="M 200 120 L 200 60" />
+                  <path d="M 200 90 L 160 50" />
+                  <path d="M 200 90 L 240 50" />
                 </g>
 
                 {/* Path Endpoints */}
                 <g className="fill-[#D47341]">
-                  <circle cx="140" cy="60" r="4" />
-                  <circle cx="200" cy="40" r="4" />
-                  <circle cx="260" cy="60" r="4" />
+                  <circle cx="160" cy="50" r="4" />
+                  <circle cx="240" cy="50" r="4" />
                 </g>
 
                 {/* Decorative Elements */}
                 <g className="stroke-[#D47341]/30">
-                  <path d="M 160 180 C 160 140, 240 140, 240 180" />
-                  <path d="M 120 180 C 120 100, 280 100, 280 180" />
-                </g>
-
-                {/* Labels */}
-                <g className="fill-white font-medium">
-                  <text x="125" y="50" className="text-[10px]">Fitness</text>
-                  <text x="180" y="30" className="text-[10px]">Product Management</text>
-                  <text x="245" y="50" className="text-[10px]">Empathy</text>
+                  <path d="M 160 120 C 160 100, 240 100, 240 120" />
+                  <path d="M 120 120 C 120 80, 280 80, 280 120" />
                 </g>
               </svg>
             </div>
 
             <div className="space-y-12">
-              {/* Fitness Section */}
-              <div className="space-y-4">
-                <h3 className="text-2xl font-semibold text-[#D47341]">Physique</h3>
-                <p className="text-lg text-gray-200">
-                  A body that is chiselled like iron.
-                </p>
-                <div className="mt-6 bg-black/30 p-6 rounded-xl">
-                  <FitnessMetrics />
-                </div>
-              </div>
-
               {/* Learning Section */}
               <div className="space-y-4">
                 <h3 className="text-2xl font-semibold text-[#D47341]">Product Management</h3>

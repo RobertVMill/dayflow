@@ -13,3 +13,18 @@ create table public.empathy_metrics (
 alter table public.empathy_metrics enable row level security;
 -- Create policy
 create policy "Enable all operations for authenticated users" on public.empathy_metrics for all using (true) with check (true);
+-- Strain Score Table
+CREATE TABLE IF NOT EXISTS strain_score (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
+    score INTEGER NOT NULL CHECK (
+        score >= 0
+        AND score <= 21
+    ),
+    date DATE NOT NULL DEFAULT CURRENT_DATE,
+    UNIQUE(date)
+);
+-- Enable Row Level Security for strain_score
+ALTER TABLE public.strain_score ENABLE ROW LEVEL SECURITY;
+-- Create policy for strain_score
+CREATE POLICY "Enable all operations for authenticated users" ON public.strain_score FOR ALL USING (true) WITH CHECK (true);

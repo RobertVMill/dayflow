@@ -33,6 +33,7 @@ interface BaseChartProps {
   isPlantBased?: boolean;
   isReliability?: boolean;
   options?: any;
+  customMax?: number;
 }
 
 type BaseChartPropsWithValue = BaseChartProps & {
@@ -145,8 +146,8 @@ function BaseChart({
 
   async function loadMetrics() {
     try {
-      const data = await getBaseMetrics(metricType);
-      setMetrics(data);
+      const data = await getBaseMetrics();
+      setMetrics(data[metricType] || []);
     } catch (err) {
       setError('Failed to load metrics');
       console.error(err);
@@ -268,12 +269,14 @@ function BaseChart({
         },
         min: 0,
         max: isBinary ? 1 : (
-          metricType === 'savings' || 
-          metricType === 'meditation' || 
-          metricType === 'walking' || 
-          metricType === 'github_commits' 
-            ? undefined 
-            : 100
+          metricType === 'strain_score' ? 21 : (
+            metricType === 'savings' || 
+            metricType === 'meditation' || 
+            metricType === 'walking' || 
+            metricType === 'github_commits' 
+              ? undefined 
+              : 100
+          )
         ),
         stepSize: isBinary ? 1 : undefined,
         ...(chartOptions?.scales?.y || {})
@@ -429,6 +432,17 @@ function BaseChart({
             placeholder="Enter cash savings amount ($)"
             className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500"
           />
+        ) : metricType === 'strain_score' ? (
+          <input
+            type="number"
+            step="1"
+            min="0"
+            max="21"
+            value={value}
+            onChange={(e) => onValueChange?.(e.target.value)}
+            placeholder="Enter strain score (0-21)"
+            className="flex-1 p-2 text-sm sm:text-base rounded bg-black/30 text-white border border-[#D47341]/20 placeholder-gray-500"
+          />
         ) : (
           <input
             type="number"
@@ -499,20 +513,37 @@ export default function BaseMetrics() {
   return (
     <form onSubmit={handleSubmit} className="w-full grid gap-6 sm:gap-8 -mx-2 sm:mx-0">
       <div className="space-y-4 sm:space-y-6">
-        <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Sleep Quality</h4>
+        <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Strain/Recovery Cycle</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <BaseChart
-            title="Sleep Score"
+            title="Recovery Score"
             metricType="sleep_score"
             yAxisLabel="%"
             value={values.sleep_score || ''}
             onValueChange={(value) => setValues(prev => ({ ...prev, sleep_score: value }))}
           />
+          <BaseChart
+            title="Strain Score"
+            metricType="strain_score"
+            yAxisLabel="Strain"
+            value={values.strain_score || ''}
+            onValueChange={(value) => setValues(prev => ({ ...prev, strain_score: value }))}
+            options={{
+              scales: {
+                y: {
+                  max: 21,
+                  ticks: {
+                    stepSize: 3
+                  }
+                }
+              }
+            }}
+          />
         </div>
       </div>
 
       <div className="space-y-4 sm:space-y-6">
-        <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Daily Goals</h4>
+        <h4 className="text-lg font-medium text-[#D47341]/80 px-2 sm:px-0">Success Habits</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <BaseChart
             title="Clean and Organized Space"

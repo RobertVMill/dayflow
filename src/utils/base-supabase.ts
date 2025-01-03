@@ -14,11 +14,14 @@ export const supabase = createClient(supabaseUrl, supabaseKey);
 
 export type MetricType = 
   | 'sleep_score'
+  | 'strain_score'
   | 'sunlight'
   | 'plant_based'
   | 'reliability'
   | 'savings'
+  | 'reading'
   | 'meditation'
+  | 'cold_plunge'
   | 'walking'
   | 'jazz_abstinence'
   | 'yoga'
@@ -34,6 +37,14 @@ export interface BaseMetric {
 }
 
 export async function addBaseMetric(metric_type: MetricType, value: number, habits?: string[]) {
+  if (metric_type === 'strain_score') {
+    const { data, error } = await supabase
+      .from('strain_score')
+      .insert([{ score: value }]);
+    if (error) throw error;
+    return data;
+  }
+
   const { data, error } = await supabase
     .from('base_metrics')
     .insert([{ metric_type, value, habits }]);
@@ -42,15 +53,41 @@ export async function addBaseMetric(metric_type: MetricType, value: number, habi
   return data;
 }
 
-export async function getBaseMetrics(metric_type: MetricType) {
-  const { data, error } = await supabase
-    .from('base_metrics')
-    .select('*')
-    .eq('metric_type', metric_type)
-    .order('created_at', { ascending: true });
+export async function getBaseMetrics() {
+  try {
+    // Get strain scores
+    const { data: strainScores, error: strainError } = await supabase
+      .from('strain_score')
+      .select('*')
+      .order('date', { ascending: true });
+    
+    if (strainError) throw strainError;
 
-  if (error) throw error;
-  return data as BaseMetric[];
+    // Get all other metrics
+    const { data: baseMetrics, error: baseError } = await supabase
+      .from('base_metrics')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    if (baseError) throw baseError;
+
+    // Group base metrics by type
+    const groupedMetrics = baseMetrics.reduce((acc, metric) => {
+      if (!acc[metric.metric_type]) {
+        acc[metric.metric_type] = [];
+      }
+      acc[metric.metric_type].push(metric);
+      return acc;
+    }, {} as Record<MetricType, BaseMetric[]>);
+
+    // Add strain scores
+    groupedMetrics.strain_score = strainScores || [];
+
+    return groupedMetrics;
+  } catch (error) {
+    console.error('Error fetching base metrics:', error);
+    throw error;
+  }
 }
 
 export function getMetricLabel(metric_type: MetricType): string {
